@@ -7,19 +7,19 @@ using Microsoft.Data.SqlClient;
 
 namespace DA
 {
-    public class VehiculoDA : IVehiculoDA
+    public class EncuestaDA : IEncuestaDA
     {
-        private IRepositorioDapper _repositorioDapper;
+        private IEncuestaDapper _repositorioDapper;
         private SqlConnection _sqlConnection;
 
         //aqui sobre la pclase genero el constructor
-        public VehiculoDA(IRepositorioDapper repositorioDapper)
+        public EncuestaDA(IEncuestaDapper repositorioDapper)
         {
             _repositorioDapper = repositorioDapper;
             _sqlConnection = _repositorioDapper.ObtenerRepositorio();
         }
         //aqui arrancan las operciones del crud 
-        public async Task<Guid> Agregar(VehiculoRequest vehiculo)
+        public async Task<Guid> Agregar(EncuestaRequest vehiculo)
         {
             //no necdesitamos el insert porque tenemos un SP
             //el @ se pone antes para que sepa que dentro de las comillas es literal
@@ -41,7 +41,7 @@ namespace DA
                 return resultadoConsulta;  
         }
 
-        public async Task<Guid> Editar(Guid Id, VehiculoRequest vehiculo)
+        public async Task<Guid> Editar(Guid Id, EncuestaRequest vehiculo)
         
         //copiamos el de agregar, recordar poner el async
     

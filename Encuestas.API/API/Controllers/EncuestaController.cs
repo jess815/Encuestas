@@ -8,13 +8,13 @@ namespace API.Controllers
     //por cada metodo tenemois un route
     [Route("api/[controller]")]
     [ApiController]
-    public class VehiculoController : ControllerBase, IVehiculoController
+    public class EncuestaController : ControllerBase, IEncuestaController
     //hereda de ControllerBase e implementa IVehiculoController
     {
-        private IVehiculoFlujo _vehiculoFlujo;
-        private ILogger<VehiculoController> _logger;
+        private IEncuestaFlujo _vehiculoFlujo;
+        private ILogger<EncuestaController> _logger;
         //inyectamos las interfaces que utilizo en las capas en el program.cs
-        public VehiculoController(IVehiculoFlujo vehiculoFlujo, ILogger<VehiculoController> logger)
+        public EncuestaController(IEncuestaFlujo vehiculoFlujo, ILogger<EncuestaController> logger)
         {
             _vehiculoFlujo = vehiculoFlujo;
             _logger = logger;
@@ -30,7 +30,7 @@ namespace API.Controllers
 
         [HttpPost]
         //en el postman se hace el post con el body (recordar ponerlo en body-raw)
-        public async Task<IActionResult> Agregar([FromBody] VehiculoRequest vehiculo)
+        public async Task<IActionResult> Agregar([FromBody] EncuestaRequest vehiculo)
         {
             var resultado = await _vehiculoFlujo.Agregar(vehiculo);
             return CreatedAtAction(nameof(Obtener), new { Id = resultado }, null);
@@ -41,7 +41,7 @@ namespace API.Controllers
 
         //lo que especificamos que nos de el route, en este caso es el id que nos va a pedir
         //podemos especificar los diferentes url que puede tener un metodo
-        public async Task<IActionResult> Editar([FromRoute] Guid Id, [FromBody] VehiculoRequest vehiculo)
+        public async Task<IActionResult> Editar([FromRoute] Guid Id, [FromBody] EncuestaRequest vehiculo)
         //aqui se puede usar Editar([FromRoute]... y funciona igual
         //si usamos Editar([FromQuery].. al ejecutarlo va a venir un id vacio, en el url se cambia para indicar que
         //viene vacio, en la url seria api/vehiculo ?= y el id pero este va a servir solo si quitamos el route que esta en HttpPut

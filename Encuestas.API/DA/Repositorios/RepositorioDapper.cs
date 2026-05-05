@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace DA.Repositorios
 {
-    public class RepositorioDapper : IRepositorioDapper
+    public class RepositorioDapper : IEncuestaDapper
     {
         private readonly IConfiguration _configuracion;
         private readonly SqlConnection _conexionBaseDatos;
@@ -25,7 +25,7 @@ namespace DA.Repositorios
             throw new NotImplementedException();
         }
 
-        SqlConnection IRepositorioDapper.ObtenerRepositorio()
+        SqlConnection IEncuestaDapper.ObtenerRepositorio()
         {
             return _conexionBaseDatos;
         }

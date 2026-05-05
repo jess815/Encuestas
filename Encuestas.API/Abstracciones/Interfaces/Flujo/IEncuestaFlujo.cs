@@ -3,12 +3,12 @@
 namespace Abstracciones.Interfaces.Flujo
 {
     //lo mismo que implementamos en el DA
-    public interface IVehiculoFlujo
+    public interface IEncuestaFlujo
     {
         Task<IEnumerable<VehiculoResponse>> Obtener();
         Task<VehiculoResponse> Obtener(Guid Id);
-        Task<Guid> Agregar(VehiculoRequest vehiculo);
-        Task<Guid> Editar(Guid Id, VehiculoRequest vehiculo);
+        Task<Guid> Agregar(EncuestaRequest vehiculo);
+        Task<Guid> Editar(Guid Id, EncuestaRequest vehiculo);
         Task<Guid> Eliminar(Guid Id);
     }
 }

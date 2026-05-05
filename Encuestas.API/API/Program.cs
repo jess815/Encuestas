@@ -18,9 +18,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //inyecciones de dependencias
-builder.Services.AddScoped<IVehiculoFlujo, VehiculoFlujo>();
-builder.Services.AddScoped<IVehiculoDA, VehiculoDA>();
-builder.Services.AddScoped<IRepositorioDapper, RepositorioDapper>();
+builder.Services.AddScoped<IEncuestaFlujo, EncuestaFlujo>();
+builder.Services.AddScoped<IEncuestaDA, EncuestaDA>();
+builder.Services.AddScoped<IEncuestaDapper, RepositorioDapper>();
 
 var app = builder.Build();
 

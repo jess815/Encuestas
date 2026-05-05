@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Abstracciones.Interfaces.API
 {
-    public interface IVehiculoController
+    public interface IEncuestaController
     {
         Task<IActionResult> Obtener();
         Task<IActionResult> Obtener(Guid Id);
-        Task<IActionResult> Agregar(VehiculoRequest vehiculo);
-        Task<IActionResult> Editar(Guid Id, VehiculoRequest vehiculo);
+        Task<IActionResult> Agregar(EncuestaRequest vehiculo);
+        Task<IActionResult> Editar(Guid Id, EncuestaRequest vehiculo);
         Task<IActionResult> Eliminar(Guid Id);
     }
 }

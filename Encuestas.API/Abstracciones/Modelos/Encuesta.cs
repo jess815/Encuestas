@@ -3,7 +3,7 @@
 namespace Abstracciones.Modelos
 {
     //implementamos las validaciones de los modelos para validar las entradas con el required
-    public class VehiculoBase
+    public class EncuestaBase
     {
         [Required(ErrorMessage ="La propiedad placa es requerida")]
         [RegularExpression(@"[A-Za-z]{3}-[0-9]{3}", ErrorMessage = "El formato de la placa debe ser AAA-###")]
@@ -31,11 +31,11 @@ namespace Abstracciones.Modelos
     }
     //hacemos una clase heredada de vehiculo base
 
-    public class VehiculoRequest : VehiculoBase
+    public class EncuestaRequest : EncuestaBase
     {
         public Guid IdModelo { get; set; }
     }
-    public class VehiculoResponse : VehiculoBase
+    public class EncuestaResponse : EncuestaBase
     {
         public Guid Id { get; set; }
         public string Modelo { get; set; }

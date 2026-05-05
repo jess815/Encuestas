@@ -6,40 +6,40 @@ namespace Flujo
 
 //flujo invoca al DA, sabe donde enviar o donde recibir la informacion
 {
-    public class VehiculoFlujo : IVehiculoFlujo
+    public class EncuestaFlujo : IEncuestaFlujo
     {
-        private IVehiculoDA _vehiculoDA;
+        private IEncuestaDA _EncuestaDA;
 
-        public VehiculoFlujo(IVehiculoDA vehiculoDA)
+        public EncuestaFlujo(IEncuestaDA vehiculoDA)
         {
-            _vehiculoDA = vehiculoDA;
+            _EncuestaDA = vehiculoDA;
         }
 
-        public Task<Guid> Agregar(VehiculoRequest vehiculo)
+        public Task<Guid> Agregar(EncuestaRequest vehiculo)
         {
             //el flujo nos dice a donde ir, para agregar vamos al DA
             //el return de agregar vehiculo
-            return _vehiculoDA.Agregar(vehiculo);
+            return _EncuestaDA.Agregar(vehiculo);
         }
 
-        public Task<Guid> Editar(Guid Id, VehiculoRequest vehiculo)
+        public Task<Guid> Editar(Guid Id, EncuestaRequest vehiculo)
         {
-            return _vehiculoDA.Editar(Id, vehiculo);
+            return _EncuestaDA.Editar(Id, vehiculo);
         }
 
         public Task<Guid> Eliminar(Guid Id)
         {
-            return _vehiculoDA.Eliminar(Id);
+            return _EncuestaDA.Eliminar(Id);
         }
 
         public Task<IEnumerable<VehiculoResponse>> Obtener()
         {
-            return _vehiculoDA.Obtener();
+            return _EncuestaDA.Obtener();
         }
 
         public Task<VehiculoResponse> Obtener(Guid Id)
         {
-            return _vehiculoDA.Obtener(Id);
+            return _EncuestaDA.Obtener(Id);
         }
     }
 }
