@@ -5,102 +5,92 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    //por cada metodo tenemois un route
     [Route("api/[controller]")]
     [ApiController]
     public class EncuestaController : ControllerBase, IEncuestaController
-    //hereda de ControllerBase e implementa IEncuestaController
     {
         private IEncuestaFlujo _encuestaFlujo;
         private ILogger<EncuestaController> _logger;
-        //inyectamos las interfaces que utilizo en las capas en el program.cs
+
         public EncuestaController(IEncuestaFlujo encuestaFlujo, ILogger<EncuestaController> logger)
         {
             _encuestaFlujo = encuestaFlujo;
             _logger = logger;
         }
 
-        #region Operaciones/CRUD
-        //la respuetsa del protocolo http sin exepciones es un codigo numerico
-        //que metodo http es y que ruta va a tener (agregar)
-
-        //no se pueden hacer return directamente, porque el tipo de datos que devolvemos en un api
-        //es un action result que va de la mano con http, entonces creamos una variable para capturar el resultado
-        //no olvidar poner los async en c/u
+        #region Operaciones CRUD
 
         [HttpPost]
-        //en el postman se hace el post con el body (recordar ponerlo en body-raw)
-        public async Task<IActionResult> Agregar([FromBody] EncuestaRequest encuesta)
+        public async Task<IActionResult> Agregar([FromBody] AreaRequest area)
         {
-            var resultado = await _encuestaFlujo.Agregar(encuesta);
-            return CreatedAtAction(nameof(Obtener), new { Id = resultado }, null);
-            //201
+            var resultado = await _encuestaFlujo.Agregar(area);
+
+            return CreatedAtAction(nameof(Obtener), new { IdArea = resultado }, null);
         }
 
-        [HttpPut("{Id}")]
-
-        //lo que especificamos que nos de el route, en este caso es el id que nos va a pedir
-        //podemos especificar los diferentes url que puede tener un metodo
-        public async Task<IActionResult> Editar([FromRoute] Guid Id, [FromBody] EncuestaRequest encuesta)
-        //aqui se puede usar Editar([FromRoute]... y funciona igual
-        //si usamos Editar([FromQuery].. al ejecutarlo va a venir un id vacio, en el url se cambia para indicar que
-        //viene vacio, en la url seria api/encuesta ?= y el id pero este va a servir solo si quitamos el route que esta en HttpPut
-
-        //aqui implementamos una validacion para saber que el encuesta que queremos editar existe
+        [HttpPut("{IdArea}")]
+        public async Task<IActionResult> Editar([FromRoute] int IdArea, [FromBody] AreaRequest area)
         {
-            if (!await VerificarEncuestaExiste(Id))
-                return NotFound("El encuesta no existe");
-            var resultado = await _encuestaFlujo.Editar(Id, encuesta);
+            if (!await VerificarAreaExiste(IdArea))
+            {
+                return NotFound("El área no existe");
+            }
+
+            var resultado = await _encuestaFlujo.Editar(IdArea, area);
+
             return Ok(resultado);
-            //200
         }
 
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> Eliminar([FromRoute] Guid Id)
+        [HttpDelete("{IdArea}")]
+        public async Task<IActionResult> Eliminar([FromRoute] int IdArea)
         {
-            if (!await VerificarEncuestaExiste(Id))
-                return NotFound("El encuesta no existe");
-            var resultado = await _encuestaFlujo.Eliminar(Id);
+            if (!await VerificarAreaExiste(IdArea))
+            {
+                return NotFound("El área no existe");
+            }
+
+            await _encuestaFlujo.Eliminar(IdArea);
+
             return NoContent();
-            //204
         }
 
-        //por medio del route le puedo cambiar el nombre, documentar mejor los endpoint, por ejemplo
-        //[HttpGet("ObtenerTodos")] ahora la ruta seríahttps://localhost:7281/api/encuesta/ObtenerTodos
-        //[HttpGet("/ObtenerTodos")] ahora la ruta seríahttps://localhost:7281/ObtenerTodos
-
-        //obtener todos
         [HttpGet]
         public async Task<IActionResult> Obtener()
         {
             var resultado = await _encuestaFlujo.Obtener();
-            if (!resultado.Any())
-                return NoContent();
-            return Ok(resultado);
-            //204 si no hay nada
-            //lo ejecuto y copio el url y al pegarlo en postman deberia darme el mismo resultado
-        }
-        //se modifican porque tienen que tener parametros para poder diferencialo
 
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> Obtener([FromRoute] Guid Id)
-        {
-            var resultado = await _encuestaFlujo.Obtener(Id);
+            if (!resultado.Any())
+            {
+                return NoContent();
+            }
+
             return Ok(resultado);
         }
-        //podemos ver todos estos endpoints en vista>otras ventanas> explorador de puntos de conexion
-        #endregion Operaciones/CRUD
+
+        [HttpGet("{IdArea}")]
+        public async Task<IActionResult> Obtener([FromRoute] int IdArea)
+        {
+            var resultado = await _encuestaFlujo.Obtener(IdArea);
+
+            if (resultado == null)
+            {
+                return NotFound("El área no existe");
+            }
+
+            return Ok(resultado);
+        }
+
+        #endregion
 
         #region Helpers
-        private async Task<bool> VerificarEncuestaExiste(Guid Id)
+
+        private async Task<bool> VerificarAreaExiste(int IdArea)
         {
-            var resultadoValidacion = false;
-            var resultadoEncuestaExiste = await _encuestaFlujo.Obtener(Id);
-            if (resultadoEncuestaExiste != null)
-                resultadoValidacion = true;
-            return resultadoValidacion;
+            var resultadoArea = await _encuestaFlujo.Obtener(IdArea);
+
+            return resultadoArea != null;
         }
 
-        #endregion 
+        #endregion
     }
 }

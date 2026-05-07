@@ -12,20 +12,15 @@ namespace DA.Repositorios
         public RepositorioDapper(IConfiguration configuracion)
         {
             _configuracion = configuracion;
-            _conexionBaseDatos = new SqlConnection
-                (_configuracion.GetConnectionString("BD"));
+
+            _conexionBaseDatos = new SqlConnection(
+                _configuracion.GetConnectionString("BD"));
         }
         //este constructor lo que hace es devolver una sql connection
         //el get connection string obtiene la cadena de conexion del appsettings
         //configuracion (iconfiguration) me permite acceder a toda la informacion del appsettings
 
         public SqlConnection ObtenerRepositorio()
-        {
-           
-            throw new NotImplementedException();
-        }
-
-        SqlConnection IEncuestaDapper.ObtenerRepositorio()
         {
             return _conexionBaseDatos;
         }

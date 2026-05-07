@@ -6,9 +6,13 @@ namespace Abstracciones.Interfaces.API
     public interface IEncuestaController
     {
         Task<IActionResult> Obtener();
-        Task<IActionResult> Obtener(Guid Id);
-        Task<IActionResult> Agregar(EncuestaRequest vehiculo);
-        Task<IActionResult> Editar(Guid Id, EncuestaRequest vehiculo);
-        Task<IActionResult> Eliminar(Guid Id);
+
+        Task<IActionResult> Obtener(int IdArea);
+
+        Task<IActionResult> Agregar(AreaRequest area);
+
+        Task<IActionResult> Editar(int IdArea, AreaRequest area);
+
+        Task<IActionResult> Eliminar(int IdArea);
     }
 }

@@ -4,11 +4,14 @@ namespace Abstracciones.Interfaces.DA
 {
     public interface IEncuestaDA
     {
-        Task<IEnumerable<VehiculoResponse>> Obtener();
-        Task<VehiculoResponse> Obtener(Guid Id);
-        Task<Guid> Agregar(EncuestaRequest vehiculo);
-        Task<Guid> Editar(Guid Id, EncuestaRequest vehiculo);
-        Task<Guid> Eliminar(Guid Id);
+        Task<IEnumerable<AreaResponse>> Obtener();
 
+        Task<AreaResponse> Obtener(int IdArea);
+
+        Task<int> Agregar(AreaRequest area);
+
+        Task<int> Editar(int IdArea, AreaRequest area);
+
+        Task<int> Eliminar(int IdArea);
     }
 }

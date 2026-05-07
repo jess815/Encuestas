@@ -3,43 +3,39 @@ using Abstracciones.Interfaces.Flujo;
 using Abstracciones.Modelos;
 
 namespace Flujo
-
-//flujo invoca al DA, sabe donde enviar o donde recibir la informacion
 {
     public class EncuestaFlujo : IEncuestaFlujo
     {
         private IEncuestaDA _EncuestaDA;
 
-        public EncuestaFlujo(IEncuestaDA vehiculoDA)
+        public EncuestaFlujo(IEncuestaDA encuestaDA)
         {
-            _EncuestaDA = vehiculoDA;
+            _EncuestaDA = encuestaDA;
         }
 
-        public Task<Guid> Agregar(EncuestaRequest vehiculo)
+        public Task<int> Agregar(AreaRequest area)
         {
-            //el flujo nos dice a donde ir, para agregar vamos al DA
-            //el return de agregar vehiculo
-            return _EncuestaDA.Agregar(vehiculo);
+            return _EncuestaDA.Agregar(area);
         }
 
-        public Task<Guid> Editar(Guid Id, EncuestaRequest vehiculo)
+        public Task<int> Editar(int IdArea, AreaRequest area)
         {
-            return _EncuestaDA.Editar(Id, vehiculo);
+            return _EncuestaDA.Editar(IdArea, area);
         }
 
-        public Task<Guid> Eliminar(Guid Id)
+        public Task<int> Eliminar(int IdArea)
         {
-            return _EncuestaDA.Eliminar(Id);
+            return _EncuestaDA.Eliminar(IdArea);
         }
 
-        public Task<IEnumerable<VehiculoResponse>> Obtener()
+        public Task<IEnumerable<AreaResponse>> Obtener()
         {
             return _EncuestaDA.Obtener();
         }
 
-        public Task<VehiculoResponse> Obtener(Guid Id)
+        public Task<AreaResponse> Obtener(int IdArea)
         {
-            return _EncuestaDA.Obtener(Id);
+            return _EncuestaDA.Obtener(IdArea);
         }
     }
 }
