@@ -9,7 +9,7 @@ namespace Abstracciones.Modelos
 
         [Required(ErrorMessage = "El texto es requerido")]
         [StringLength(300)]
-        public string Texto { get; set; }
+        public string Texto { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El orden de la pregunta es requerido")]
         public int OrdenPregunta { get; set; }
@@ -26,6 +26,6 @@ namespace Abstracciones.Modelos
     {
         public int IdPregunta { get; set; }
 
-        public string NombreArea { get; set; }
+        public string NombreArea { get; set; } = string.Empty;
     }
 }

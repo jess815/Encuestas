@@ -13,29 +13,29 @@ namespace Flujo
             _preguntaDA = preguntaDA;
         }
 
-        public Task<int> Agregar(PreguntaRequest pregunta)
+        public async Task<int> Agregar(PreguntaRequest pregunta)
         {
-            return _preguntaDA.Agregar(pregunta);
+            return await _preguntaDA.Agregar(pregunta);
         }
 
-        public Task<int> Editar(int IdPregunta, PreguntaRequest pregunta)
+        public async Task<int> Editar(int IdPregunta, PreguntaRequest pregunta)
         {
-            return _preguntaDA.Editar(IdPregunta, pregunta);
+            return await _preguntaDA.Editar(IdPregunta, pregunta);
         }
 
-        public Task<int> Eliminar(int IdPregunta)
+        public async Task<int> Eliminar(int IdPregunta)
         {
-            return _preguntaDA.Eliminar(IdPregunta);
+            return await _preguntaDA.Eliminar(IdPregunta);
         }
 
-        public Task<IEnumerable<PreguntaResponse>> Obtener()
+        public async Task<IEnumerable<PreguntaResponse>> Obtener()
         {
-            return _preguntaDA.Obtener();
+            return await _preguntaDA.Obtener();
         }
 
-        public Task<PreguntaResponse> Obtener(int IdPregunta)
+        public async Task<PreguntaResponse> Obtener(int IdPregunta)
         {
-            return _preguntaDA.Obtener(IdPregunta);
+            return await _preguntaDA.Obtener(IdPregunta);
         }
     }
 }

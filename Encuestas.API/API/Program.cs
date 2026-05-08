@@ -12,14 +12,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
 //swagger es una herramienta de documentacion las api restful
 builder.Services.AddSwaggerGen();
 
 //inyecciones de dependencias
 builder.Services.AddScoped<IEncuestaFlujo, EncuestaFlujo>();
 builder.Services.AddScoped<IEncuestaDA, EncuestaDA>();
+
+builder.Services.AddScoped<IPreguntaFlujo, PreguntaFlujo>();
+builder.Services.AddScoped<IPreguntaDA, PreguntaDA>();
+
 builder.Services.AddScoped<IEncuestaDapper, RepositorioDapper>();
 
 var app = builder.Build();
