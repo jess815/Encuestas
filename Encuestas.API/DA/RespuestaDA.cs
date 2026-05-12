@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,7 +37,8 @@ namespace DA
 
             if (respuesta.DetalleRespuestas != null && respuesta.DetalleRespuestas.Any())
             {
-                notaGeneral = Convert.ToDecimal(respuesta.DetalleRespuestas.Average(x => x.ValorCalculado));
+                notaGeneral = Convert.ToDecimal(
+                    respuesta.DetalleRespuestas.Average(x => x.ValorCalculado));
 
                 alerta = respuesta.DetalleRespuestas.Any(x =>
                     x.ValorCalculado <= 25);
@@ -157,28 +158,58 @@ namespace DA
 
         public async Task<RespuestaResponse> Obtener(int IdRespuesta)
         {
-            string query = @"SELECT
-                                r.IdRespuesta,
-                                r.IdArea,
-                                a.Nombre AS NombreArea,
-                                r.NombreSocio,
-                                r.Evento,
-                                r.FechaEvento,
-                                r.Comentario,
-                                r.NotaGeneral,
-                                r.Alerta,
-                                r.FechaRespuesta
-                            FROM Respuestas r
-                            INNER JOIN Areas a
-                                ON r.IdArea = a.IdArea
-                            WHERE r.IdRespuesta = @IdRespuesta";
+            string queryRespuesta = @"SELECT
+                                        r.IdRespuesta,
+                                        r.IdArea,
+                                        a.Nombre AS NombreArea,
+                                        r.NombreSocio,
+                                        r.Evento,
+                                        r.FechaEvento,
+                                        r.Comentario,
+                                        r.NotaGeneral,
+                                        r.Alerta,
+                                        r.FechaRespuesta
+                                    FROM Respuestas r
+                                    INNER JOIN Areas a
+                                        ON r.IdArea = a.IdArea
+                                    WHERE r.IdRespuesta = @IdRespuesta";
 
-            var resultadoConsulta = await _sqlConnection.QueryFirstOrDefaultAsync<RespuestaResponse>(query, new
+            var respuesta = await _sqlConnection.QueryFirstOrDefaultAsync<RespuestaResponse>(
+                queryRespuesta,
+                new
+                {
+                    IdRespuesta
+                });
+
+            if (respuesta == null)
             {
-                IdRespuesta
-            });
+                return null;
+            }
 
-            return resultadoConsulta;
+            string queryDetalle = @"SELECT
+                                        rd.IdRespuestaDetalle,
+                                        rd.IdPregunta,
+                                        p.Texto AS TextoPregunta,
+                                        rd.IdOpcion,
+                                        o.Texto AS TextoOpcion,
+                                        rd.ValorCalculado
+                                    FROM RespuestaDetalle rd
+                                    INNER JOIN Preguntas p
+                                        ON rd.IdPregunta = p.IdPregunta
+                                    INNER JOIN Opciones o
+                                        ON rd.IdOpcion = o.IdOpcion
+                                    WHERE rd.IdRespuesta = @IdRespuesta";
+
+            var detalle = await _sqlConnection.QueryAsync<RespuestaDetalleResponse>(
+                queryDetalle,
+                new
+                {
+                    IdRespuesta
+                });
+
+            respuesta.DetalleRespuestas = detalle.ToList();
+
+            return respuesta;
         }
 
         private async Task verificarRespuestaExiste(int IdRespuesta)
