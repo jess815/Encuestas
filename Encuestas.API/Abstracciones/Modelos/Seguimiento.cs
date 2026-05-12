@@ -16,7 +16,6 @@ namespace Abstracciones.Modelos
     {
 
     }
-
     public class SeguimientoResponse : SeguimientoBase
     {
         public int IdSeguimiento { get; set; }
