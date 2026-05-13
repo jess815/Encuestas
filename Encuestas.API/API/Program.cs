@@ -44,6 +44,9 @@ builder.Services.AddScoped<IOpcionDA, OpcionDA>();
 builder.Services.AddScoped<ICorreoAreaFlujo, CorreoAreaFlujo>();
 builder.Services.AddScoped<ICorreoAreaDA, CorreoAreaDA>();
 
+builder.Services.AddScoped<IUsuarioAreaFlujo, UsuarioAreaFlujo>();
+builder.Services.AddScoped<IUsuarioAreaDA, UsuarioAreaDA>();
+
 builder.Services.AddScoped<IEncuestaDapper, RepositorioDapper>();
 
 var app = builder.Build();
