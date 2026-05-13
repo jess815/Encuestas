@@ -47,6 +47,9 @@ builder.Services.AddScoped<ICorreoAreaDA, CorreoAreaDA>();
 builder.Services.AddScoped<IUsuarioAreaFlujo, UsuarioAreaFlujo>();
 builder.Services.AddScoped<IUsuarioAreaDA, UsuarioAreaDA>();
 
+builder.Services.AddScoped<IBitacoraFlujo, BitacoraFlujo>();
+builder.Services.AddScoped<IBitacoraDA, BitacoraDA>();
+
 builder.Services.AddScoped<IEncuestaDapper, RepositorioDapper>();
 
 var app = builder.Build();
