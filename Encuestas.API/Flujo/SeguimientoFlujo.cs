@@ -1,7 +1,6 @@
 ﻿using Abstracciones.Interfaces.DA;
 using Abstracciones.Interfaces.Flujo;
 using Abstracciones.Modelos;
-
 namespace Flujo
 {
     public class SeguimientoFlujo : ISeguimientoFlujo
