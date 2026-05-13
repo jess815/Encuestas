@@ -41,6 +41,9 @@ builder.Services.AddScoped<IDashboardDA, DashboardDA>();
 builder.Services.AddScoped<IOpcionFlujo, OpcionFlujo>();
 builder.Services.AddScoped<IOpcionDA, OpcionDA>();
 
+builder.Services.AddScoped<ICorreoAreaFlujo, CorreoAreaFlujo>();
+builder.Services.AddScoped<ICorreoAreaDA, CorreoAreaDA>();
+
 builder.Services.AddScoped<IEncuestaDapper, RepositorioDapper>();
 
 var app = builder.Build();
