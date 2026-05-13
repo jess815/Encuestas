@@ -34,12 +34,34 @@ namespace Flujo
 
         public async Task<int> Editar(int IdPregunta, PreguntaRequest pregunta)
         {
-            return await _preguntaDA.Editar(IdPregunta, pregunta);
+            var resultado =
+                await _preguntaDA.Editar(IdPregunta, pregunta);
+
+            await _bitacoraDA.Agregar(new BitacoraRequest
+            {
+                IdUsuario = 1,
+                Modulo = "Preguntas",
+                Accion = "Edición de pregunta",
+                Detalle = $"Se editó la pregunta #{IdPregunta}"
+            });
+
+            return resultado;
         }
 
         public async Task<int> Eliminar(int IdPregunta)
         {
-            return await _preguntaDA.Eliminar(IdPregunta);
+            var resultado =
+                await _preguntaDA.Eliminar(IdPregunta);
+
+            await _bitacoraDA.Agregar(new BitacoraRequest
+            {
+                IdUsuario = 1,
+                Modulo = "Preguntas",
+                Accion = "Eliminación de pregunta",
+                Detalle = $"Se eliminó la pregunta #{IdPregunta}"
+            });
+
+            return resultado;
         }
 
         public async Task<IEnumerable<PreguntaResponse>> Obtener()
