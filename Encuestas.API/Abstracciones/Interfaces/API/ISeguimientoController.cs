@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Abstracciones.Modelos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Abstracciones.Interfaces.API
 {
-    internal class ISeguimientoController
+    public interface ISeguimientoController
     {
+        Task<IActionResult> Obtener();
+
+        Task<IActionResult> Obtener(int IdSeguimiento);
+
+        Task<IActionResult> Agregar(SeguimientoRequest seguimiento);
+
+        Task<IActionResult> Editar(int IdSeguimiento, SeguimientoRequest seguimiento);
+
+        Task<IActionResult> Eliminar(int IdSeguimiento);
     }
 }

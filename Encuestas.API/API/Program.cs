@@ -29,6 +29,9 @@ builder.Services.AddScoped<IPreguntaDA, PreguntaDA>();
 builder.Services.AddScoped<IRespuestaFlujo, RespuestaFlujo>();
 builder.Services.AddScoped<IRespuestaDA, RespuestaDA>();
 
+builder.Services.AddScoped<ISeguimientoFlujo, SeguimientoFlujo>();
+builder.Services.AddScoped<ISeguimientoDA, SeguimientoDA>();
+
 builder.Services.AddScoped<IEncuestaDapper, RepositorioDapper>();
 
 var app = builder.Build();
