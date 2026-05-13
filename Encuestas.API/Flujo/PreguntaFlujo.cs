@@ -7,15 +7,29 @@ namespace Flujo
     public class PreguntaFlujo : IPreguntaFlujo
     {
         private IPreguntaDA _preguntaDA;
+        private IBitacoraDA _bitacoraDA;
 
-        public PreguntaFlujo(IPreguntaDA preguntaDA)
+        public PreguntaFlujo(
+            IPreguntaDA preguntaDA,
+            IBitacoraDA bitacoraDA)
         {
             _preguntaDA = preguntaDA;
+            _bitacoraDA = bitacoraDA;
         }
 
         public async Task<int> Agregar(PreguntaRequest pregunta)
         {
-            return await _preguntaDA.Agregar(pregunta);
+            var resultado = await _preguntaDA.Agregar(pregunta);
+
+            await _bitacoraDA.Agregar(new BitacoraRequest
+            {
+                IdUsuario = 1,
+                Modulo = "Preguntas",
+                Accion = "Creación de pregunta",
+                Detalle = $"Se creó la pregunta: {pregunta.Texto}"
+            });
+
+            return resultado;
         }
 
         public async Task<int> Editar(int IdPregunta, PreguntaRequest pregunta)

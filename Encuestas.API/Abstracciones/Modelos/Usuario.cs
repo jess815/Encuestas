@@ -30,9 +30,21 @@ namespace Abstracciones.Modelos
 
     }
 
-    public class UsuarioResponse : UsuarioBase
+    public class UsuarioResponse
     {
         public int IdUsuario { get; set; }
+
+        public string Nombre { get; set; } = string.Empty;
+
+        public string Usuario { get; set; } = string.Empty;
+
+        public bool Administrador { get; set; }
+
+        public bool EditaEncuesta { get; set; }
+
+        public bool ExportaExcel { get; set; }
+
+        public bool Activo { get; set; }
     }
 
     public class LoginRequest
