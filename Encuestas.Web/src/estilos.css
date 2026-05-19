@@ -1,0 +1,72 @@
+:root{
+  --verde-crcc: #006361;
+  --dorado-crcc: #B97F00;
+  --negro-crcc: #111111;
+  --gris-claro: #f4f4f4;
+  --blanco: #ffffff;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--gris-claro);
+  color: var(--negro-crcc);
+}
+
+.contenedor{
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tarjeta{
+  background-color: var(--blanco);
+  padding: 40px;
+  border-radius: 16px;
+  width: 450px;
+  box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.titulo{
+  color: var(--verde-crcc);
+  font-size: 32px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.subtitulo{
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.input{
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+.boton{
+  background-color: var(--verde-crcc);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.boton:hover{
+  background-color: #004c4a;
+}
