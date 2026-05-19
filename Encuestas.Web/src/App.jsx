@@ -2,7 +2,7 @@ function App() {
 
   return (
     <>
-      <h1>Encuestas CRCC</h1>
+      <h1>Encuestas C</h1>
     </>
   )
 }
