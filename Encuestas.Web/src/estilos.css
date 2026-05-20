@@ -95,3 +95,90 @@ body{
   width: 250px;
   box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
 }
+
+.dashboard-layout{
+  display: flex;
+}
+
+.sidebar{
+  width: 250px;
+  min-height: calc(100vh - 76px);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 2px 0px 10px rgba(0,0,0,0.05);
+}
+
+.menu-boton{
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--verde-crcc);
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.menu-boton:hover{
+  background-color: #004c4a;
+}
+
+.tabla-contenedor{
+  width: 100%;
+  background-color: white;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+}
+
+.tabla-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.tabla{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla th{
+  background-color: var(--verde-crcc);
+  color: white;
+  padding: 14px;
+  text-align: left;
+}
+
+.tabla td{
+  padding: 14px;
+  border-bottom: 1px solid #ddd;
+}
+
+.boton-agregar{
+  background-color: var(--verde-crcc);
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.boton-tabla{
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-right: 8px;
+  cursor: pointer;
+  color: white;
+}
+
+.editar{
+  background-color: #B97F00;
+}
+
+.eliminar{
+  background-color: #c0392b;
+}

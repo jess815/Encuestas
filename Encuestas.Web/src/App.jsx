@@ -6,6 +6,7 @@ function App() {
   const [password, setPassword] = useState('')
   const [logueado, setLogueado] = useState(false)
   const [cargando, setCargando] = useState(false)
+  const [modulo, setModulo] = useState('dashboard')
 
   const iniciarSesion = async () => {
 
@@ -124,41 +125,193 @@ function App() {
 
             </div>
 
-            <div className="contenido-dashboard">
+            <div className="dashboard-layout">
 
-              <div className="card-dashboard">
+              <div className="sidebar">
 
-                <h3>
+                <button
+                  className="menu-boton"
+                  onClick={() => setModulo('dashboard')}
+                >
+                  Dashboard
+                </button>
+
+                <button
+                  className="menu-boton"
+                  onClick={() => setModulo('encuestas')}
+                >
                   Encuestas
-                </h3>
+                </button>
 
-                <p>
-                  Administración de encuestas
-                </p>
-
-              </div>
-
-              <div className="card-dashboard">
-
-                <h3>
+                <button
+                  className="menu-boton"
+                  onClick={() => setModulo('seguimientos')}
+                >
                   Seguimientos
-                </h3>
+                </button>
 
-                <p>
-                  Gestión de seguimientos
-                </p>
+                <button
+                  className="menu-boton"
+                  onClick={() => setModulo('reportes')}
+                >
+                  Reportes
+                </button>
+
+                <button
+                  className="menu-boton"
+                  onClick={() => setModulo('usuarios')}
+                >
+                  Usuarios
+                </button>
 
               </div>
 
-              <div className="card-dashboard">
+              <div className="contenido-dashboard">
 
-                <h3>
-                  Reportes
-                </h3>
+                {
+                  modulo === 'dashboard' &&
 
-                <p>
-                  Indicadores y estadísticas
-                </p>
+                  <>
+                    <div className="card-dashboard">
+
+                      <h3>
+                        Encuestas Activas
+                      </h3>
+
+                      <p>
+                        12 encuestas disponibles
+                      </p>
+
+                    </div>
+
+                    <div className="card-dashboard">
+
+                      <h3>
+                        Seguimientos Pendientes
+                      </h3>
+
+                      <p>
+                        5 casos pendientes
+                      </p>
+
+                    </div>
+
+                    <div className="card-dashboard">
+
+                      <h3>
+                        Promedio General
+                      </h3>
+
+                      <p>
+                        92%
+                      </p>
+
+                    </div>
+                  </>
+                }
+
+                {
+  modulo === 'encuestas' &&
+
+  <div className="tabla-contenedor">
+
+    <div className="tabla-header">
+
+      <h2>
+        Administración de Encuestas
+      </h2>
+
+      <button className="boton-agregar">
+        Nueva Encuesta
+      </button>
+
+    </div>
+
+    <table className="tabla">
+
+      <thead>
+
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td>1</td>
+          <td>Encuesta Restaurante</td>
+          <td>Activa</td>
+          <td>20/05/2026</td>
+
+          <td>
+
+            <button className="boton-tabla editar">
+              Editar
+            </button>
+
+            <button className="boton-tabla eliminar">
+              Eliminar
+            </button>
+
+          </td>
+
+        </tr>
+
+        <tr>
+          <td>2</td>
+          <td>Encuesta Eventos</td>
+          <td>Activa</td>
+          <td>18/05/2026</td>
+
+          <td>
+
+            <button className="boton-tabla editar">
+              Editar
+            </button>
+
+            <button className="boton-tabla eliminar">
+              Eliminar
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+}
+                {
+                  modulo === 'seguimientos' &&
+
+                  <div className="card-dashboard">
+                    <h3>Módulo de Seguimientos</h3>
+                  </div>
+                }
+
+                {
+                  modulo === 'reportes' &&
+
+                  <div className="card-dashboard">
+                    <h3>Módulo de Reportes</h3>
+                  </div>
+                }
+
+                {
+                  modulo === 'usuarios' &&
+
+                  <div className="card-dashboard">
+                    <h3>Módulo de Usuarios</h3>
+                  </div>
+                }
 
               </div>
 
