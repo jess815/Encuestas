@@ -28,5 +28,6 @@ jobs:
           -H "Content-Type: application/json" \
           -d '{
             "subject": "Se realizó lo siguiente en el nuevo sistema de encuestas para restaurantes y eventos",
+            "departmentId": "82257900000006907",
             "description": "Enlace al repositorio: https://github.com/${{ github.repository }}/commits/${{ github.ref_name }}"
           }'
