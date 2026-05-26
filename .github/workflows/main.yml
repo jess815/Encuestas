@@ -1,0 +1,32 @@
+name: Crear Ticket Zoho
+
+on:
+  push:
+
+jobs:
+  crear-ticket:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obtener Access Token
+        run: |
+          RESPONSE=$(curl -s -X POST "https://accounts.zoho.com/oauth/v2/token" \
+          -d "refresh_token=${{ secrets.ZOHO_REFRESH_TOKEN }}" \
+          -d "client_id=${{ secrets.ZOHO_CLIENT_ID }}" \
+          -d "client_secret=${{ secrets.ZOHO_CLIENT_SECRET }}" \
+          -d "grant_type=refresh_token")
+
+          ACCESS_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
+
+          echo "ACCESS_TOKEN=$ACCESS_TOKEN" >> $GITHUB_ENV
+
+      - name: Crear Ticket
+        run: |
+          curl -X POST "https://desk.zoho.com/api/v1/tickets" \
+          -H "Authorization: Zoho-oauthtoken $ACCESS_TOKEN" \
+          -H "orgId: ${{ secrets.ZOHO_ORG_ID }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "subject": "Se realizó lo siguiente en el nuevo sistema de encuestas para restaurantes y eventos",
+            "description": "Enlace al repositorio: https://github.com/${{ github.repository }}/commits/${{ github.ref_name }}"
+          }'
