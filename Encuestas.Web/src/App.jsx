@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function App() {
 
@@ -7,6 +7,38 @@ function App() {
   const [logueado, setLogueado] = useState(false)
   const [cargando, setCargando] = useState(false)
   const [modulo, setModulo] = useState('dashboard')
+  const [encuestas, setEncuestas] = useState([])
+
+  useEffect(() => {
+
+    obtenerEncuestas()
+
+  }, [])
+
+  const obtenerEncuestas = async () => {
+
+    try {
+
+      const response = await fetch('/api/Encuesta')
+
+      if (response.ok) {
+
+        const data = await response.json()
+
+        console.log(data)
+
+        setEncuestas(data)
+
+      }
+
+    }
+    catch (error) {
+
+      console.error(error)
+
+    }
+
+  }
 
   const iniciarSesion = async () => {
 
@@ -211,84 +243,73 @@ function App() {
                 }
 
                 {
-  modulo === 'encuestas' &&
+                  modulo === 'encuestas' &&
 
-  <div className="tabla-contenedor">
+                  <div className="tabla-contenedor">
 
-    <div className="tabla-header">
+                    <div className="tabla-header">
 
-      <h2>
-        Administración de Encuestas
-      </h2>
+                      <h2>
+                        Administración de Encuestas
+                      </h2>
 
-      <button className="boton-agregar">
-        Nueva Encuesta
-      </button>
+                      <button className="boton-agregar">
+                        Nueva Encuesta
+                      </button>
 
-    </div>
+                    </div>
 
-    <table className="tabla">
+                    <table className="tabla">
 
-      <thead>
+                      <thead>
 
-        <tr>
-          <th>ID</th>
-          <th>Título</th>
-          <th>Estado</th>
-          <th>Fecha</th>
-          <th>Acciones</th>
-        </tr>
+                        <tr>
+                          <th>ID</th>
+                          <th>Nombre</th>
+                          <th>Acciones</th>
+                        </tr>
 
-      </thead>
+                      </thead>
 
-      <tbody>
+                      <tbody>
 
-        <tr>
-          <td>1</td>
-          <td>Encuesta Restaurante</td>
-          <td>Activa</td>
-          <td>20/05/2026</td>
+                        {
+                          encuestas.map((encuesta) => (
 
-          <td>
+                            <tr key={encuesta.idArea}>
 
-            <button className="boton-tabla editar">
-              Editar
-            </button>
+                              <td>
+                                {encuesta.idArea}
+                              </td>
 
-            <button className="boton-tabla eliminar">
-              Eliminar
-            </button>
+                              <td>
+                                {encuesta.nombre}
+                              </td>
 
-          </td>
+                              <td>
 
-        </tr>
+                                <button className="boton-tabla editar">
+                                  Editar
+                                </button>
 
-        <tr>
-          <td>2</td>
-          <td>Encuesta Eventos</td>
-          <td>Activa</td>
-          <td>18/05/2026</td>
+                                <button className="boton-tabla eliminar">
+                                  Eliminar
+                                </button>
 
-          <td>
+                              </td>
 
-            <button className="boton-tabla editar">
-              Editar
-            </button>
+                            </tr>
 
-            <button className="boton-tabla eliminar">
-              Eliminar
-            </button>
+                          ))
+                        }
 
-          </td>
+                      </tbody>
 
-        </tr>
+                    </table>
 
-      </tbody>
+                  </div>
+                }
 
-    </table>
-
-  </div>
-}
                 {
                   modulo === 'seguimientos' &&
 
