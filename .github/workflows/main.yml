@@ -22,7 +22,7 @@ jobs:
 
       - name: Crear Ticket
         run: |
-          curl -X POST "https://desk.zoho.com/api/v1/tickets" \
+          curl -v -X POST "https://desk.zoho.com/api/v1/tickets" \
           -H "Authorization: Zoho-oauthtoken $ACCESS_TOKEN" \
           -H "orgId: ${{ secrets.ZOHO_ORG_ID }}" \
           -H "Content-Type: application/json" \
