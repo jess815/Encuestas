@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Areas from './pages/Areas'
 
 function App() {
 
