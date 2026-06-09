@@ -1,4 +1,4 @@
-function Areas() {
+function Areas({ encuestas }) {
 
     return (
 
@@ -30,23 +30,35 @@ function Areas() {
 
                 <tbody>
 
-                    <tr>
-                        <td>1</td>
-                        <td>El Ceibo</td>
+                    {
+                        encuestas.map((encuesta) => (
 
-                        <td>
+                            <tr key={encuesta.idArea}>
 
-                            <button className="boton-tabla editar">
-                                Editar
-                            </button>
+                                <td>
+                                    {encuesta.idArea}
+                                </td>
 
-                            <button className="boton-tabla eliminar">
-                                Eliminar
-                            </button>
+                                <td>
+                                    {encuesta.nombre}
+                                </td>
 
-                        </td>
+                                <td>
 
-                    </tr>
+                                    <button className="boton-tabla editar">
+                                        Editar
+                                    </button>
+
+                                    <button className="boton-tabla eliminar">
+                                        Eliminar
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        ))
+                    }
 
                 </tbody>
 
