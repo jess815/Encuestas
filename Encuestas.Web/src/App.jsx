@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Areas from './pages/Areas'
 import Sidebar from './componentes/Sidebar'
+import Navbar from './componentes/Navbar'
 
 function App() {
 
@@ -151,13 +152,7 @@ function App() {
 
           <div className="dashboard">
 
-            <div className="navbar">
-
-              <h2>
-                Sistema de Encuestas CRCC
-              </h2>
-
-            </div>
+            <Navbar />
 
             <div className="dashboard-layout">
 
