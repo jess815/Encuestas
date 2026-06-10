@@ -183,3 +183,11 @@ body{
 .eliminar{
   background-color: #c0392b;
 }
+
+.modal-botones{
+    margin-top: 20px;
+}
+
+.modal-botones .boton{
+    margin-top: 10px;
+}
