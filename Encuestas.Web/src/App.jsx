@@ -205,7 +205,10 @@ function App() {
                 {
   modulo === 'encuestas' &&
 
-  <Areas encuestas={encuestas} />
+  <Areas
+  encuestas={encuestas}
+  obtenerEncuestas={obtenerEncuestas}
+/>
 }
 
                 {

@@ -1,10 +1,54 @@
 import { useState } from 'react'
 
-function ModalNuevaArea({ onCerrar }) {
+function ModalNuevaArea({ onCerrar, obtenerEncuestas }) {
 
     const [nombre, setNombre] = useState('')
     const [tipo, setTipo] = useState('')
     const [activo, setActivo] = useState(true)
+
+    const guardar = async () => {
+
+        try {
+
+            const response = await fetch('/api/Encuesta', {
+
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+                    nombre: nombre,
+                    tipo: tipo,
+                    activo: activo
+                })
+
+            })
+
+            if (response.ok) {
+
+                await obtenerEncuestas()
+
+                onCerrar()
+
+            }
+            else {
+
+                alert('No fue posible guardar el área')
+
+            }
+
+        }
+        catch (error) {
+
+            console.error(error)
+
+            alert('Error al conectar con el servidor')
+
+        }
+
+    }
 
     return (
 
@@ -46,7 +90,10 @@ function ModalNuevaArea({ onCerrar }) {
 
                 <div className="modal-botones">
 
-                    <button className="boton">
+                    <button
+                        className="boton"
+                        onClick={guardar}
+                    >
                         Guardar
                     </button>
 

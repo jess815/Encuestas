@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ModalNuevaArea from '../componentes/ModalNuevaArea'
 
-function Areas({ encuestas }) {
+function Areas({ encuestas, obtenerEncuestas }) {
 
     const [mostrarModal, setMostrarModal] = useState(false)
 
@@ -81,6 +81,7 @@ function Areas({ encuestas }) {
 
                 <ModalNuevaArea
                     onCerrar={() => setMostrarModal(false)}
+                    obtenerEncuestas={obtenerEncuestas}
                 />
             }
 
