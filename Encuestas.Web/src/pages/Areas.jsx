@@ -4,6 +4,28 @@ import ModalNuevaArea from '../componentes/ModalNuevaArea'
 function Areas({ encuestas, obtenerEncuestas }) {
 
     const [mostrarModal, setMostrarModal] = useState(false)
+    const [areaEditar, setAreaEditar] = useState(null)
+
+    const abrirNuevo = () => {
+
+        setAreaEditar(null)
+        setMostrarModal(true)
+
+    }
+
+    const abrirEditar = (area) => {
+
+        setAreaEditar(area)
+        setMostrarModal(true)
+
+    }
+
+    const cerrarModal = () => {
+
+        setAreaEditar(null)
+        setMostrarModal(false)
+
+    }
 
     return (
 
@@ -19,7 +41,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
                     <button
                         className="boton-agregar"
-                        onClick={() => setMostrarModal(true)}
+                        onClick={abrirNuevo}
                     >
                         Nueva Área
                     </button>
@@ -41,21 +63,24 @@ function Areas({ encuestas, obtenerEncuestas }) {
                     <tbody>
 
                         {
-                            encuestas.map((encuesta) => (
+                            encuestas.map((area) => (
 
-                                <tr key={encuesta.idArea}>
+                                <tr key={area.idArea}>
 
                                     <td>
-                                        {encuesta.idArea}
+                                        {area.idArea}
                                     </td>
 
                                     <td>
-                                        {encuesta.nombre}
+                                        {area.nombre}
                                     </td>
 
                                     <td>
 
-                                        <button className="boton-tabla editar">
+                                        <button
+                                            className="boton-tabla editar"
+                                            onClick={() => abrirEditar(area)}
+                                        >
                                             Editar
                                         </button>
 
@@ -80,8 +105,9 @@ function Areas({ encuestas, obtenerEncuestas }) {
                 mostrarModal &&
 
                 <ModalNuevaArea
-                    onCerrar={() => setMostrarModal(false)}
+                    onCerrar={cerrarModal}
                     obtenerEncuestas={obtenerEncuestas}
+                    areaEditar={areaEditar}
                 />
             }
 

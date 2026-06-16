@@ -1,18 +1,38 @@
 import { useState } from 'react'
 
-function ModalNuevaArea({ onCerrar, obtenerEncuestas }) {
+function ModalNuevaArea({ onCerrar, obtenerEncuestas, areaEditar }) {
 
-    const [nombre, setNombre] = useState('')
-    const [tipo, setTipo] = useState('')
-    const [activo, setActivo] = useState(true)
+    const esEdicion = areaEditar !== null && areaEditar !== undefined
+
+    const [nombre, setNombre] = useState(esEdicion ? areaEditar.nombre : '')
+    const [tipo, setTipo] = useState(esEdicion ? areaEditar.tipo : '')
+    const [activo, setActivo] = useState(esEdicion ? areaEditar.activo : true)
 
     const guardar = async () => {
 
+        if (nombre.trim() === '') {
+            alert('El nombre es requerido')
+            return
+        }
+
+        if (tipo.trim() === '') {
+            alert('El tipo es requerido')
+            return
+        }
+
         try {
 
-            const response = await fetch('/api/Encuesta', {
+            const url = esEdicion
+                ? `/api/Encuesta/${areaEditar.idArea}`
+                : '/api/Encuesta'
 
-                method: 'POST',
+            const metodo = esEdicion
+                ? 'PUT'
+                : 'POST'
+
+            const response = await fetch(url, {
+
+                method: metodo,
 
                 headers: {
                     'Content-Type': 'application/json'
@@ -57,7 +77,11 @@ function ModalNuevaArea({ onCerrar, obtenerEncuestas }) {
             <div className="modal">
 
                 <h2>
-                    Nueva Área
+                    {
+                        esEdicion
+                            ? 'Editar Área'
+                            : 'Nueva Área'
+                    }
                 </h2>
 
                 <input
@@ -94,7 +118,11 @@ function ModalNuevaArea({ onCerrar, obtenerEncuestas }) {
                         className="boton"
                         onClick={guardar}
                     >
-                        Guardar
+                        {
+                            esEdicion
+                                ? 'Guardar cambios'
+                                : 'Guardar'
+                        }
                     </button>
 
                     <button
