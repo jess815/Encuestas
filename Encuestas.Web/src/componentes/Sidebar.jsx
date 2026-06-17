@@ -27,6 +27,13 @@ function Sidebar({ setModulo }) {
 
             <button
                 className="menu-boton"
+                onClick={() => setModulo('correosArea')}
+            >
+                Correos por Área
+            </button>
+
+            <button
+                className="menu-boton"
                 onClick={() => setModulo('seguimientos')}
             >
                 Seguimientos

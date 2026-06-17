@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Areas from './pages/Areas'
 import Opciones from './pages/Opciones'
+import CorreosArea from './pages/CorreosArea'
 import Sidebar from './componentes/Sidebar'
 import Navbar from './componentes/Navbar'
 
@@ -216,6 +217,12 @@ function App() {
                   modulo === 'opciones' &&
 
                   <Opciones />
+                }
+
+                {
+                  modulo === 'correosArea' &&
+
+                  <CorreosArea areas={encuestas} />
                 }
 
                 {
