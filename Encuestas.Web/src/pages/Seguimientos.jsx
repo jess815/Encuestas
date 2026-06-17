@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react'
 import ModalNuevoSeguimiento from '../componentes/ModalNuevoSeguimiento'
+import ComentariosSeguimiento from './ComentariosSeguimiento'
 
 function Seguimientos() {
 
     const [seguimientos, setSeguimientos] = useState([])
+    const [respuestas, setRespuestas] = useState([])
     const [mostrarModal, setMostrarModal] = useState(false)
     const [seguimientoEditar, setSeguimientoEditar] = useState(null)
+    const [seguimientoSeleccionado, setSeguimientoSeleccionado] = useState(null)
+    const [respuestaSeleccionada, setRespuestaSeleccionada] = useState(null)
 
     useEffect(() => {
 
         obtenerSeguimientos()
+        obtenerRespuestas()
 
     }, [])
 
@@ -44,6 +49,44 @@ function Seguimientos() {
 
     }
 
+    // Carga las encuestas respondidas
+    const obtenerRespuestas = async () => {
+
+        try {
+
+            const response = await fetch('/api/Respuesta')
+
+            if (response.ok) {
+
+                const data = await response.json()
+
+                setRespuestas(data)
+
+            }
+            else if (response.status === 204) {
+
+                setRespuestas([])
+
+            }
+
+        }
+        catch (error) {
+
+            console.error(error)
+
+            alert('Error al cargar las encuestas respondidas')
+
+        }
+
+    }
+
+    // Busca la encuesta relacionada al seguimiento
+    const obtenerRespuestaSeguimiento = (idRespuesta) => {
+
+        return respuestas.find((respuesta) => respuesta.idRespuesta === idRespuesta)
+
+    }
+
     // Abre el modal para crear
     const abrirNuevo = () => {
 
@@ -57,6 +100,16 @@ function Seguimientos() {
 
         setSeguimientoEditar(seguimiento)
         setMostrarModal(true)
+
+    }
+
+    // Abre los comentarios del seguimiento
+    const abrirComentarios = (seguimiento) => {
+
+        const respuesta = obtenerRespuestaSeguimiento(seguimiento.idRespuesta)
+
+        setSeguimientoSeleccionado(seguimiento)
+        setRespuestaSeleccionada(respuesta)
 
     }
 
@@ -116,6 +169,23 @@ function Seguimientos() {
 
     }
 
+    if (seguimientoSeleccionado !== null) {
+
+        return (
+
+            <ComentariosSeguimiento
+                seguimiento={seguimientoSeleccionado}
+                respuesta={respuestaSeleccionada}
+                onVolver={() => {
+                    setSeguimientoSeleccionado(null)
+                    setRespuestaSeleccionada(null)
+                }}
+            />
+
+        )
+
+    }
+
     return (
 
         <>
@@ -125,7 +195,7 @@ function Seguimientos() {
                 <div className="tabla-header">
 
                     <h2>
-                        Administración de Seguimientos
+                        Seguimientos de Encuestas
                     </h2>
 
                     <button
@@ -142,11 +212,13 @@ function Seguimientos() {
                     <thead>
 
                         <tr>
-                            <th>ID</th>
-                            <th>ID Respuesta</th>
+                            <th>Encuesta</th>
+                            <th>Área</th>
+                            <th>Socio / Evento</th>
+                            <th>Comentario de encuesta</th>
+                            <th>Nota</th>
                             <th>Estado</th>
-                            <th>Fecha creación</th>
-                            <th>Fecha resolución</th>
+                            <th>Fecha seguimiento</th>
                             <th>Acciones</th>
                         </tr>
 
@@ -155,51 +227,88 @@ function Seguimientos() {
                     <tbody>
 
                         {
-                            seguimientos.map((seguimiento) => (
+                            seguimientos.map((seguimiento) => {
 
-                                <tr key={seguimiento.idSeguimiento}>
+                                const respuesta = obtenerRespuestaSeguimiento(seguimiento.idRespuesta)
 
-                                    <td>
-                                        {seguimiento.idSeguimiento}
-                                    </td>
+                                return (
 
-                                    <td>
-                                        {seguimiento.idRespuesta}
-                                    </td>
+                                    <tr key={seguimiento.idSeguimiento}>
 
-                                    <td>
-                                        {seguimiento.estado}
-                                    </td>
+                                        <td>
+                                            Encuesta #{seguimiento.idRespuesta}
+                                        </td>
 
-                                    <td>
-                                        {formatearFecha(seguimiento.fechaCreacion)}
-                                    </td>
+                                        <td>
+                                            {
+                                                respuesta
+                                                    ? respuesta.nombreArea
+                                                    : 'Sin área'
+                                            }
+                                        </td>
 
-                                    <td>
-                                        {formatearFecha(seguimiento.fechaResolucion)}
-                                    </td>
+                                        <td>
+                                            {
+                                                respuesta
+                                                    ? (respuesta.nombreSocio || respuesta.evento || 'No indicado')
+                                                    : 'No disponible'
+                                            }
+                                        </td>
 
-                                    <td>
+                                        <td>
+                                            {
+                                                respuesta
+                                                    ? (respuesta.comentario || 'Sin comentario')
+                                                    : 'No disponible'
+                                            }
+                                        </td>
 
-                                        <button
-                                            className="boton-tabla editar"
-                                            onClick={() => abrirEditar(seguimiento)}
-                                        >
-                                            Editar
-                                        </button>
+                                        <td>
+                                            {
+                                                respuesta && respuesta.notaGeneral !== null
+                                                    ? respuesta.notaGeneral
+                                                    : 'N/A'
+                                            }
+                                        </td>
 
-                                        <button
-                                            className="boton-tabla eliminar"
-                                            onClick={() => eliminarSeguimiento(seguimiento.idSeguimiento)}
-                                        >
-                                            Eliminar
-                                        </button>
+                                        <td>
+                                            {seguimiento.estado}
+                                        </td>
 
-                                    </td>
+                                        <td>
+                                            {formatearFecha(seguimiento.fechaCreacion)}
+                                        </td>
 
-                                </tr>
+                                        <td>
 
-                            ))
+                                            <button
+                                                className="boton-tabla editar"
+                                                onClick={() => abrirComentarios(seguimiento)}
+                                            >
+                                                Ver seguimiento
+                                            </button>
+
+                                            <button
+                                                className="boton-tabla editar"
+                                                onClick={() => abrirEditar(seguimiento)}
+                                            >
+                                                Editar
+                                            </button>
+
+                                            <button
+                                                className="boton-tabla eliminar"
+                                                onClick={() => eliminarSeguimiento(seguimiento.idSeguimiento)}
+                                            >
+                                                Eliminar
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                )
+
+                            })
                         }
 
                     </tbody>
