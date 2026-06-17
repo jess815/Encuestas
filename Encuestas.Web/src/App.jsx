@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Areas from './pages/Areas'
+import Opciones from './pages/Opciones'
 import Sidebar from './componentes/Sidebar'
 import Navbar from './componentes/Navbar'
 
@@ -203,13 +204,19 @@ function App() {
                 }
 
                 {
-  modulo === 'encuestas' &&
+                  modulo === 'encuestas' &&
 
-  <Areas
-  encuestas={encuestas}
-  obtenerEncuestas={obtenerEncuestas}
-/>
-}
+                  <Areas
+                    encuestas={encuestas}
+                    obtenerEncuestas={obtenerEncuestas}
+                  />
+                }
+
+                {
+                  modulo === 'opciones' &&
+
+                  <Opciones />
+                }
 
                 {
                   modulo === 'seguimientos' &&

@@ -20,6 +20,13 @@ function Sidebar({ setModulo }) {
 
             <button
                 className="menu-boton"
+                onClick={() => setModulo('opciones')}
+            >
+                Opciones
+            </button>
+
+            <button
+                className="menu-boton"
                 onClick={() => setModulo('seguimientos')}
             >
                 Seguimientos
