@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Areas from './pages/Areas'
 import Opciones from './pages/Opciones'
 import CorreosArea from './pages/CorreosArea'
+import Usuarios from './pages/Usuarios'
 import Sidebar from './componentes/Sidebar'
 import Navbar from './componentes/Navbar'
 
@@ -244,9 +245,7 @@ function App() {
                 {
                   modulo === 'usuarios' &&
 
-                  <div className="card-dashboard">
-                    <h3>Módulo de Usuarios</h3>
-                  </div>
+                  <Usuarios />
                 }
 
               </div>
