@@ -34,6 +34,20 @@ function Sidebar({ setModulo }) {
 
             <button
                 className="menu-boton"
+                onClick={() => setModulo('usuarios')}
+            >
+                Usuarios
+            </button>
+
+            <button
+                className="menu-boton"
+                onClick={() => setModulo('usuarioAreas')}
+            >
+                Áreas por Usuario
+            </button>
+
+            <button
+                className="menu-boton"
                 onClick={() => setModulo('seguimientos')}
             >
                 Seguimientos
@@ -44,13 +58,6 @@ function Sidebar({ setModulo }) {
                 onClick={() => setModulo('reportes')}
             >
                 Reportes
-            </button>
-
-            <button
-                className="menu-boton"
-                onClick={() => setModulo('usuarios')}
-            >
-                Usuarios
             </button>
 
         </div>

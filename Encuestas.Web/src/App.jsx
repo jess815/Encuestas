@@ -3,6 +3,7 @@ import Areas from './pages/Areas'
 import Opciones from './pages/Opciones'
 import CorreosArea from './pages/CorreosArea'
 import Usuarios from './pages/Usuarios'
+import UsuarioAreas from './pages/UsuarioAreas'
 import Sidebar from './componentes/Sidebar'
 import Navbar from './componentes/Navbar'
 
@@ -227,6 +228,18 @@ function App() {
                 }
 
                 {
+                  modulo === 'usuarios' &&
+
+                  <Usuarios />
+                }
+
+                {
+                  modulo === 'usuarioAreas' &&
+
+                  <UsuarioAreas areas={encuestas} />
+                }
+
+                {
                   modulo === 'seguimientos' &&
 
                   <div className="card-dashboard">
@@ -240,12 +253,6 @@ function App() {
                   <div className="card-dashboard">
                     <h3>Módulo de Reportes</h3>
                   </div>
-                }
-
-                {
-                  modulo === 'usuarios' &&
-
-                  <Usuarios />
                 }
 
               </div>
