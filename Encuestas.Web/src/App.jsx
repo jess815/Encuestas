@@ -5,6 +5,7 @@ import CorreosArea from './pages/CorreosArea'
 import Usuarios from './pages/Usuarios'
 import UsuarioAreas from './pages/UsuarioAreas'
 import Seguimientos from './pages/Seguimientos'
+import Reportes from './pages/Reportes'
 import Sidebar from './componentes/Sidebar'
 import Navbar from './componentes/Navbar'
 
@@ -294,9 +295,7 @@ function App() {
                 {
                   modulo === 'reportes' &&
 
-                  <div className="card-dashboard">
-                    <h3>Módulo de Reportes</h3>
-                  </div>
+                  <Reportes />
                 }
 
               </div>
