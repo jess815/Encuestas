@@ -324,6 +324,7 @@ function Seguimientos() {
                     onCerrar={cerrarModal}
                     obtenerSeguimientos={obtenerSeguimientos}
                     seguimientoEditar={seguimientoEditar}
+                    respuestas={respuestas}
                 />
             }
 

@@ -17,12 +17,21 @@ function App() {
   const [modulo, setModulo] = useState('dashboard')
   const [encuestas, setEncuestas] = useState([])
 
+  const [dashboardDatos, setDashboardDatos] = useState({
+    cantidadEncuestas: 0,
+    promedioGeneral: 0,
+    cantidadAlertas: 0,
+    cantidadComentarios: 0
+  })
+
   useEffect(() => {
 
     obtenerEncuestas()
+    obtenerDashboard()
 
   }, [])
 
+  // Carga las áreas
   const obtenerEncuestas = async () => {
 
     try {
@@ -36,6 +45,30 @@ function App() {
         console.log(data)
 
         setEncuestas(data)
+
+      }
+
+    }
+    catch (error) {
+
+      console.error(error)
+
+    }
+
+  }
+
+  // Carga los datos reales del dashboard
+  const obtenerDashboard = async () => {
+
+    try {
+
+      const response = await fetch('/api/Dashboard')
+
+      if (response.ok) {
+
+        const data = await response.json()
+
+        setDashboardDatos(data)
 
       }
 
@@ -172,11 +205,11 @@ function App() {
                     <div className="card-dashboard">
 
                       <h3>
-                        Encuestas Activas
+                        Encuestas recibidas
                       </h3>
 
                       <p>
-                        12 encuestas disponibles
+                        {dashboardDatos.cantidadEncuestas}
                       </p>
 
                     </div>
@@ -184,11 +217,11 @@ function App() {
                     <div className="card-dashboard">
 
                       <h3>
-                        Seguimientos Pendientes
+                        Promedio general
                       </h3>
 
                       <p>
-                        5 casos pendientes
+                        {dashboardDatos.promedioGeneral}%
                       </p>
 
                     </div>
@@ -196,11 +229,23 @@ function App() {
                     <div className="card-dashboard">
 
                       <h3>
-                        Promedio General
+                        Alertas generadas
                       </h3>
 
                       <p>
-                        92%
+                        {dashboardDatos.cantidadAlertas}
+                      </p>
+
+                    </div>
+
+                    <div className="card-dashboard">
+
+                      <h3>
+                        Comentarios registrados
+                      </h3>
+
+                      <p>
+                        {dashboardDatos.cantidadComentarios}
                       </p>
 
                     </div>

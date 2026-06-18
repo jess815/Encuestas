@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function ModalNuevoSeguimiento({ onCerrar, obtenerSeguimientos, seguimientoEditar }) {
+function ModalNuevoSeguimiento({ onCerrar, obtenerSeguimientos, seguimientoEditar, respuestas }) {
 
     // Valida si se está creando o editando
     const esEdicion = seguimientoEditar !== null && seguimientoEditar !== undefined
@@ -9,11 +9,22 @@ function ModalNuevoSeguimiento({ onCerrar, obtenerSeguimientos, seguimientoEdita
     const [idRespuesta, setIdRespuesta] = useState(esEdicion ? seguimientoEditar.idRespuesta : '')
     const [estado, setEstado] = useState(esEdicion ? seguimientoEditar.estado : 'Pendiente')
 
+    // Da formato a la fecha
+    const formatearFecha = (fecha) => {
+
+        if (fecha === null || fecha === undefined) {
+            return 'Sin fecha'
+        }
+
+        return new Date(fecha).toLocaleDateString()
+
+    }
+
     // Guarda o edita el seguimiento
     const guardar = async () => {
 
-        if (idRespuesta === '' || Number(idRespuesta) <= 0) {
-            alert('El IdRespuesta es requerido')
+        if (idRespuesta === '') {
+            alert('Debe seleccionar una encuesta respondida')
             return
         }
 
@@ -89,16 +100,31 @@ function ModalNuevoSeguimiento({ onCerrar, obtenerSeguimientos, seguimientoEdita
                 </h2>
 
                 <label>
-                    ID de respuesta
+                    Encuesta respondida
                 </label>
 
-                <input
-                    type="number"
-                    placeholder="Ejemplo: 1"
+                <select
                     className="input"
                     value={idRespuesta}
                     onChange={(e) => setIdRespuesta(e.target.value)}
-                />
+                >
+                    <option value="">
+                        Seleccione una encuesta
+                    </option>
+
+                    {
+                        respuestas.map((respuesta) => (
+
+                            <option
+                                key={respuesta.idRespuesta}
+                                value={respuesta.idRespuesta}
+                            >
+                                Encuesta #{respuesta.idRespuesta} - {respuesta.nombreArea} - {respuesta.nombreSocio || respuesta.evento || 'Sin referencia'} - {formatearFecha(respuesta.fechaRespuesta)}
+                            </option>
+
+                        ))
+                    }
+                </select>
 
                 <label>
                     Estado
