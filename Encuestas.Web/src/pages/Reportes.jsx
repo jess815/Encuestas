@@ -64,6 +64,69 @@ function Reportes() {
 
     }
 
+    // Evita problemas con comas o saltos al exportar
+    const limpiarTexto = (valor) => {
+
+        if (valor === null || valor === undefined) {
+            return ''
+        }
+
+        return String(valor).replace(/"/g, '""')
+
+    }
+
+    // Exporta los resultados filtrados
+    const exportarExcel = () => {
+
+        if (respuestasFiltradas.length === 0) {
+            alert('No hay datos para exportar')
+            return
+        }
+
+        const encabezados = [
+            'ID',
+            'Area',
+            'Socio o Evento',
+            'Comentario',
+            'Nota General',
+            'Alerta',
+            'Fecha Respuesta'
+        ]
+
+        const filas = respuestasFiltradas.map((respuesta) => [
+            respuesta.idRespuesta,
+            respuesta.nombreArea,
+            respuesta.nombreSocio || respuesta.evento || 'No indicado',
+            respuesta.comentario || 'Sin comentario',
+            respuesta.notaGeneral !== null ? respuesta.notaGeneral : 'N/A',
+            respuesta.alerta ? 'Si' : 'No',
+            formatearFecha(respuesta.fechaRespuesta)
+        ])
+
+        const contenido = [
+            encabezados,
+            ...filas
+        ]
+            .map((fila) =>
+                fila.map((columna) => `"${limpiarTexto(columna)}"`).join(';')
+            )
+            .join('\n')
+
+        const archivo = new Blob([`\uFEFF${contenido}`], {
+            type: 'text/csv;charset=utf-8;'
+        })
+
+        const url = URL.createObjectURL(archivo)
+
+        const enlace = document.createElement('a')
+        enlace.href = url
+        enlace.download = 'reporte_encuestas.csv'
+        enlace.click()
+
+        URL.revokeObjectURL(url)
+
+    }
+
     // Obtiene las áreas únicas para el filtro
     const areasUnicas = [...new Set(respuestas.map((respuesta) => respuesta.nombreArea))]
 
@@ -99,6 +162,13 @@ function Reportes() {
                 <h2>
                     Reporte de Encuestas Respondidas
                 </h2>
+
+                <button
+                    className="boton-agregar"
+                    onClick={exportarExcel}
+                >
+                    Exportar Excel
+                </button>
 
             </div>
 
