@@ -6,6 +6,7 @@ import Usuarios from './pages/Usuarios'
 import UsuarioAreas from './pages/UsuarioAreas'
 import Seguimientos from './pages/Seguimientos'
 import Reportes from './pages/Reportes'
+import Bitacora from './pages/Bitacora'
 import Sidebar from './componentes/Sidebar'
 import Navbar from './componentes/Navbar'
 
@@ -14,6 +15,7 @@ function App() {
   const [usuario, setUsuario] = useState('')
   const [password, setPassword] = useState('')
   const [logueado, setLogueado] = useState(false)
+  const [usuarioLogueado, setUsuarioLogueado] = useState(null)
   const [cargando, setCargando] = useState(false)
   const [modulo, setModulo] = useState('dashboard')
   const [encuestas, setEncuestas] = useState([])
@@ -82,6 +84,7 @@ function App() {
 
   }
 
+  // Inicia sesión en el sistema
   const iniciarSesion = async () => {
 
     try {
@@ -109,6 +112,7 @@ function App() {
 
         console.log(data)
 
+        setUsuarioLogueado(data)
         setLogueado(true)
 
       }
@@ -131,6 +135,17 @@ function App() {
       setCargando(false)
 
     }
+
+  }
+
+  // Cierra la sesión actual
+  const cerrarSesion = () => {
+
+    setLogueado(false)
+    setUsuarioLogueado(null)
+    setUsuario('')
+    setPassword('')
+    setModulo('dashboard')
 
   }
 
@@ -191,7 +206,10 @@ function App() {
 
           <div className="dashboard">
 
-            <Navbar />
+            <Navbar
+              usuarioLogueado={usuarioLogueado}
+              cerrarSesion={cerrarSesion}
+            />
 
             <div className="dashboard-layout">
 
@@ -202,7 +220,8 @@ function App() {
                 {
                   modulo === 'dashboard' &&
 
-                  <>
+                  <div className="dashboard-resumen">
+
                     <div className="card-dashboard">
 
                       <h3>
@@ -250,7 +269,8 @@ function App() {
                       </p>
 
                     </div>
-                  </>
+
+                  </div>
                 }
 
                 {
@@ -296,6 +316,12 @@ function App() {
                   modulo === 'reportes' &&
 
                   <Reportes />
+                }
+
+                {
+                  modulo === 'bitacora' &&
+
+                  <Bitacora />
                 }
 
               </div>

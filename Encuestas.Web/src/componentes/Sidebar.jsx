@@ -60,6 +60,13 @@ function Sidebar({ setModulo }) {
                 Reportes
             </button>
 
+            <button
+                className="menu-boton"
+                onClick={() => setModulo('bitacora')}
+            >
+                Bitácora
+            </button>
+
         </div>
 
     )

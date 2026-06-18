@@ -64,7 +64,7 @@ function Reportes() {
 
     }
 
-    // Evita problemas con comas o saltos al exportar
+    // Evita problemas con comillas al exportar
     const limpiarTexto = (valor) => {
 
         if (valor === null || valor === undefined) {
@@ -83,9 +83,11 @@ function Reportes() {
             return
         }
 
+        const separador = ';'
+
         const encabezados = [
             'ID',
-            'Area',
+            'Área',
             'Socio o Evento',
             'Comentario',
             'Nota General',
@@ -99,18 +101,20 @@ function Reportes() {
             respuesta.nombreSocio || respuesta.evento || 'No indicado',
             respuesta.comentario || 'Sin comentario',
             respuesta.notaGeneral !== null ? respuesta.notaGeneral : 'N/A',
-            respuesta.alerta ? 'Si' : 'No',
+            respuesta.alerta ? 'Sí' : 'No',
             formatearFecha(respuesta.fechaRespuesta)
         ])
 
-        const contenido = [
+        const contenidoTabla = [
             encabezados,
             ...filas
         ]
             .map((fila) =>
-                fila.map((columna) => `"${limpiarTexto(columna)}"`).join(';')
+                fila.map((columna) => `"${limpiarTexto(columna)}"`).join(separador)
             )
             .join('\n')
+
+        const contenido = `sep=;\n${contenidoTabla}`
 
         const archivo = new Blob([`\uFEFF${contenido}`], {
             type: 'text/csv;charset=utf-8;'
