@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Encuesta from './pages/Encuesta'
 import Areas from './pages/Areas'
 import Opciones from './pages/Opciones'
 import CorreosArea from './pages/CorreosArea'
@@ -26,6 +27,14 @@ function App() {
     cantidadAlertas: 0,
     cantidadComentarios: 0
   })
+
+  const rutaActual = window.location.pathname.toLowerCase()
+
+  const esRutaEncuesta = rutaActual.startsWith('/encuestas/')
+
+  const slugArea = rutaActual
+    .replace('/encuestas/', '')
+    .replace('/', '')
 
   useEffect(() => {
 
@@ -146,6 +155,16 @@ function App() {
     setUsuario('')
     setPassword('')
     setModulo('dashboard')
+
+  }
+
+  if (esRutaEncuesta) {
+
+    return (
+
+      <Encuesta slugArea={slugArea} />
+
+    )
 
   }
 

@@ -8,6 +8,42 @@ function Areas({ encuestas, obtenerEncuestas }) {
     const [areaEditar, setAreaEditar] = useState(null)
     const [areaSeleccionada, setAreaSeleccionada] = useState(null)
 
+    // Convierte el nombre del área para usarlo en la URL
+    const crearSlug = (texto) => {
+
+        return texto
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s/g, '')
+            .replace(/[^a-z0-9]/g, '')
+
+    }
+
+    // Copia el enlace de la encuesta
+    const copiarEnlace = async (area) => {
+
+        const slug = crearSlug(area.nombre)
+        const enlace = `${window.location.origin}/encuestas/${slug}`
+
+        try {
+
+            await navigator.clipboard.writeText(enlace)
+
+            alert('Enlace copiado correctamente')
+
+        }
+        catch (error) {
+
+            console.error(error)
+
+            alert(enlace)
+
+        }
+
+    }
+
+    // Abre el modal para crear
     const abrirNuevo = () => {
 
         setAreaEditar(null)
@@ -15,6 +51,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
+    // Abre el modal para editar
     const abrirEditar = (area) => {
 
         setAreaEditar(area)
@@ -22,6 +59,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
+    // Cierra el modal
     const cerrarModal = () => {
 
         setAreaEditar(null)
@@ -29,6 +67,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
+    // Elimina un área
     const eliminarArea = async (idArea) => {
 
         const confirmar = window.confirm('¿Está segura de eliminar esta área?')
@@ -141,6 +180,13 @@ function Areas({ encuestas, obtenerEncuestas }) {
                                     </td>
 
                                     <td>
+
+                                        <button
+                                            className="boton-tabla editar"
+                                            onClick={() => copiarEnlace(area)}
+                                        >
+                                            Copiar enlace
+                                        </button>
 
                                         <button
                                             className="boton-tabla editar"

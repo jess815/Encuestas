@@ -15,7 +15,7 @@ function Sidebar({ setModulo }) {
                 className="menu-boton"
                 onClick={() => setModulo('encuestas')}
             >
-                Encuestas
+                Administración
             </button>
 
             <button
