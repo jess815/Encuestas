@@ -789,3 +789,112 @@ textarea.input{
   font-weight: 600;
   margin: -6px 0 14px 0;
 }
+
+/* Confirmación de encuesta */
+
+.encuesta-confirmacion{
+  max-width: 560px;
+  margin: 90px auto;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 42px 34px;
+  text-align: center;
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.12);
+}
+
+.confirmacion-icono{
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background-color: var(--verde-crcc);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  font-weight: bold;
+  margin: 0 auto 20px auto;
+}
+
+.encuesta-confirmacion h1{
+  color: var(--verde-crcc);
+  margin-bottom: 10px;
+}
+
+.encuesta-confirmacion p{
+  color: #444444;
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.confirmacion-detalle{
+  color: #666666;
+  font-size: 15px;
+  margin-bottom: 26px !important;
+}
+
+@media (max-width: 700px){
+
+  .encuesta-confirmacion{
+    margin: 60px auto;
+    padding: 32px 22px;
+  }
+
+  .confirmacion-icono{
+    width: 62px;
+    height: 62px;
+    font-size: 34px;
+  }
+
+  .encuesta-confirmacion h1{
+    font-size: 25px;
+  }
+
+}
+
+/* Avance de encuesta */
+
+.encuesta-titulo-progreso{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.encuesta-titulo-progreso h3{
+  margin-bottom: 0;
+}
+
+.encuesta-titulo-progreso span{
+  color: #555555;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.avance-encuesta{
+  margin: 14px 0 20px 0;
+}
+
+.avance-barra{
+  width: 100%;
+  height: 9px;
+  background-color: #e7e7e7;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.avance-barra-interna{
+  height: 100%;
+  background-color: var(--verde-crcc);
+  border-radius: 20px;
+  transition: width 0.25s ease;
+}
+
+@media (max-width: 700px){
+
+  .encuesta-titulo-progreso{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+}

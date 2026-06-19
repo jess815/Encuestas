@@ -273,6 +273,13 @@ function Encuesta({ slugArea }) {
         .filter((opcion) => opcion.activo)
         .sort((a, b) => a.ordenVisual - b.ordenVisual)
 
+    const cantidadRespondidas = obtenerPreguntasRespondidas().length
+    const totalPreguntas = preguntasFiltradas.length
+
+    const porcentajeAvance = totalPreguntas === 0
+        ? 0
+        : Math.round((cantidadRespondidas / totalPreguntas) * 100)
+
     if (cargandoDatos) {
 
         return (
@@ -327,21 +334,29 @@ function Encuesta({ slugArea }) {
 
             <div className="encuesta-publica">
 
-                <div className="encuesta-mensaje">
+                <div className="encuesta-confirmacion">
+
+                    <div className="confirmacion-icono">
+                        ✓
+                    </div>
 
                     <h1>
-                        Gracias por responder
+                        Respuesta registrada
                     </h1>
 
                     <p>
-                        Su respuesta fue registrada correctamente.
+                        Gracias por compartir su opinión.
+                    </p>
+
+                    <p className="confirmacion-detalle">
+                        Sus comentarios nos ayudan a mejorar la experiencia en el Club.
                     </p>
 
                     <button
                         className="boton"
                         onClick={nuevaEncuesta}
                     >
-                        Responder otra encuesta
+                        Registrar otra respuesta
                     </button>
 
                 </div>
@@ -412,9 +427,31 @@ function Encuesta({ slugArea }) {
 
                 <div className="encuesta-seccion">
 
-                    <h3>
-                        Preguntas
-                    </h3>
+                    <div className="encuesta-titulo-progreso">
+
+                        <h3>
+                            Preguntas
+                        </h3>
+
+                        <span>
+                            {cantidadRespondidas} de {totalPreguntas} respondidas
+                        </span>
+
+                    </div>
+
+                    <div className="avance-encuesta">
+
+                        <div className="avance-barra">
+
+                            <div
+                                className="avance-barra-interna"
+                                style={{ width: `${porcentajeAvance}%` }}
+                            >
+                            </div>
+
+                        </div>
+
+                    </div>
 
                     {
                         mostrarAvisoIncompleto && preguntasFaltantes.length > 0 &&
