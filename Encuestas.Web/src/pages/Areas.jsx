@@ -2,13 +2,29 @@ import { useState } from 'react'
 import ModalNuevaArea from '../componentes/ModalNuevaArea'
 import PreguntasArea from './PreguntasArea'
 
-function Areas({ encuestas, obtenerEncuestas }) {
+function Areas({
+    encuestas,
+    obtenerEncuestas,
+    areasPermitidas,
+    usuarioLogueado
+}) {
 
     const [mostrarModal, setMostrarModal] = useState(false)
     const [areaEditar, setAreaEditar] = useState(null)
     const [areaSeleccionada, setAreaSeleccionada] = useState(null)
 
-    // Convierte el nombre del área en una ruta válida para la encuesta
+    // revisa si el usuario es administrador
+    const esAdministrador =
+        usuarioLogueado?.administrador === true
+
+    // deja solo las areas que puede ver el usuario
+    const areasVisibles = esAdministrador
+        ? encuestas
+        : encuestas.filter((area) =>
+            areasPermitidas.includes(area.idArea)
+        )
+
+    // convierte el nombre del area en una ruta valida
     const crearSlug = (texto = '') => {
 
         return String(texto)
@@ -20,7 +36,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
-    // Construye el enlace completo de la encuesta
+    // construye el enlace completo de la encuesta
     const obtenerEnlaceEncuesta = (area) => {
 
         const slug = crearSlug(area.nombre)
@@ -29,7 +45,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
-    // Copia el enlace de la encuesta al portapapeles
+    // copia el enlace de la encuesta
     const copiarEnlace = async (area) => {
 
         const enlace = obtenerEnlaceEncuesta(area)
@@ -51,7 +67,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
-    // Abre la encuesta en otra pestaña
+    // abre la encuesta en otra pestana
     const abrirEncuesta = (area) => {
 
         const enlace = obtenerEnlaceEncuesta(area)
@@ -60,7 +76,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
-    // Abre el modal para crear una nueva área
+    // abre el modal para crear una nueva area
     const abrirNuevo = () => {
 
         setAreaEditar(null)
@@ -68,7 +84,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
-    // Abre el modal para editar un área
+    // abre el modal para editar un area
     const abrirEditar = (area) => {
 
         setAreaEditar(area)
@@ -76,7 +92,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
-    // Cierra el modal de área
+    // cierra el modal del area
     const cerrarModal = () => {
 
         setAreaEditar(null)
@@ -84,10 +100,12 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
-    // Elimina un área registrada
+    // elimina un area registrada
     const eliminarArea = async (idArea) => {
 
-        const confirmar = window.confirm('¿Está segura de eliminar esta área?')
+        const confirmar = window.confirm(
+            '¿Está segura de eliminar esta área?'
+        )
 
         if (!confirmar) {
             return
@@ -95,9 +113,12 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
         try {
 
-            const response = await fetch(`/api/Encuesta/${idArea}`, {
-                method: 'DELETE'
-            })
+            const response = await fetch(
+                `/api/Encuesta/${idArea}`,
+                {
+                    method: 'DELETE'
+                }
+            )
 
             if (response.ok) {
 
@@ -121,6 +142,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
+    // muestra las preguntas del area seleccionada
     if (areaSeleccionada !== null) {
 
         return (
@@ -146,108 +168,138 @@ function Areas({ encuestas, obtenerEncuestas }) {
                         Administración de Áreas
                     </h2>
 
-                    <button
-                        className="boton-agregar"
-                        onClick={abrirNuevo}
-                    >
-                        Nueva Área
-                    </button>
+                    {
+                        esAdministrador &&
+
+                        <button
+                            className="boton-agregar"
+                            onClick={abrirNuevo}
+                        >
+                            Nueva Área
+                        </button>
+                    }
 
                 </div>
 
-                <table className="tabla">
+                {
+                    areasVisibles.length === 0 ?
 
-                    <thead>
+                        <div className="card-dashboard">
 
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Tipo</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
+                            <h3>
+                                Sin áreas asignadas
+                            </h3>
 
-                    </thead>
+                            <p>
+                                Su usuario no tiene áreas disponibles para administrar.
+                            </p>
 
-                    <tbody>
+                        </div>
 
-                        {
-                            encuestas.map((area) => (
+                        :
 
-                                <tr key={area.idArea}>
+                        <table className="tabla">
 
-                                    <td>
-                                        {area.idArea}
-                                    </td>
+                            <thead>
 
-                                    <td>
-                                        {area.nombre}
-                                    </td>
-
-                                    <td>
-                                        {area.tipo}
-                                    </td>
-
-                                    <td>
-                                        {
-                                            area.activo
-                                                ? 'Activo'
-                                                : 'Inactivo'
-                                        }
-                                    </td>
-
-                                    <td>
-
-                                        <button
-                                            className="boton-tabla editar"
-                                            onClick={() => abrirEncuesta(area)}
-                                        >
-                                            Abrir encuesta
-                                        </button>
-
-                                        <button
-                                            className="boton-tabla editar"
-                                            onClick={() => copiarEnlace(area)}
-                                        >
-                                            Copiar enlace
-                                        </button>
-
-                                        <button
-                                            className="boton-tabla editar"
-                                            onClick={() => setAreaSeleccionada(area)}
-                                        >
-                                            Ver preguntas
-                                        </button>
-
-                                        <button
-                                            className="boton-tabla editar"
-                                            onClick={() => abrirEditar(area)}
-                                        >
-                                            Editar
-                                        </button>
-
-                                        <button
-                                            className="boton-tabla eliminar"
-                                            onClick={() => eliminarArea(area.idArea)}
-                                        >
-                                            Eliminar
-                                        </button>
-
-                                    </td>
-
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Tipo</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
                                 </tr>
 
-                            ))
-                        }
+                            </thead>
 
-                    </tbody>
+                            <tbody>
 
-                </table>
+                                {
+                                    areasVisibles.map((area) => (
+
+                                        <tr key={area.idArea}>
+
+                                            <td>
+                                                {area.idArea}
+                                            </td>
+
+                                            <td>
+                                                {area.nombre}
+                                            </td>
+
+                                            <td>
+                                                {area.tipo}
+                                            </td>
+
+                                            <td>
+                                                {
+                                                    area.activo
+                                                        ? 'Activo'
+                                                        : 'Inactivo'
+                                                }
+                                            </td>
+
+                                            <td>
+
+                                                <button
+                                                    className="boton-tabla editar"
+                                                    onClick={() => abrirEncuesta(area)}
+                                                >
+                                                    Abrir encuesta
+                                                </button>
+
+                                                <button
+                                                    className="boton-tabla editar"
+                                                    onClick={() => copiarEnlace(area)}
+                                                >
+                                                    Copiar enlace
+                                                </button>
+
+                                                <button
+                                                    className="boton-tabla editar"
+                                                    onClick={() => setAreaSeleccionada(area)}
+                                                >
+                                                    Ver preguntas
+                                                </button>
+
+                                                {
+                                                    esAdministrador &&
+
+                                                    <>
+
+                                                        <button
+                                                            className="boton-tabla editar"
+                                                            onClick={() => abrirEditar(area)}
+                                                        >
+                                                            Editar
+                                                        </button>
+
+                                                        <button
+                                                            className="boton-tabla eliminar"
+                                                            onClick={() => eliminarArea(area.idArea)}
+                                                        >
+                                                            Eliminar
+                                                        </button>
+
+                                                    </>
+                                                }
+
+                                            </td>
+
+                                        </tr>
+
+                                    ))
+                                }
+
+                            </tbody>
+
+                        </table>
+                }
 
             </div>
 
             {
-                mostrarModal &&
+                mostrarModal && esAdministrador &&
 
                 <ModalNuevaArea
                     onCerrar={cerrarModal}

@@ -20,6 +20,7 @@ function App() {
   const [cargando, setCargando] = useState(false)
   const [modulo, setModulo] = useState('dashboard')
   const [encuestas, setEncuestas] = useState([])
+  const [areasPermitidas, setAreasPermitidas] = useState([])
 
   const [dashboardDatos, setDashboardDatos] = useState({
     cantidadEncuestas: 0,
@@ -56,9 +57,12 @@ function App() {
 
         const data = await response.json()
 
-        console.log(data)
-
         setEncuestas(data)
+
+      }
+      else if (response.status === 204) {
+
+        setEncuestas([])
 
       }
 
@@ -95,6 +99,71 @@ function App() {
 
   }
 
+  // carga las areas que puede ver el usuario
+  const obtenerAreasUsuario = async (idUsuario, administrador) => {
+
+    try {
+
+      // el administrador puede ver todas las areas
+      if (administrador === true) {
+
+        const response = await fetch('/api/Encuesta')
+
+        if (response.ok) {
+
+          const data = await response.json()
+
+          const idsAreas = data.map((area) => area.idArea)
+
+          setAreasPermitidas(idsAreas)
+
+        }
+        else {
+
+          setAreasPermitidas([])
+
+        }
+
+        return
+
+      }
+
+      const response = await fetch('/api/UsuarioArea')
+
+      if (response.ok) {
+
+        const data = await response.json()
+
+        // deja solo las areas asignadas al usuario
+        const relacionesUsuario = data.filter((relacion) =>
+          relacion.idUsuario === idUsuario &&
+          relacion.verArea === true
+        )
+
+        const idsAreas = relacionesUsuario.map((relacion) =>
+          relacion.idArea
+        )
+
+        setAreasPermitidas(idsAreas)
+
+      }
+      else if (response.status === 204) {
+
+        setAreasPermitidas([])
+
+      }
+
+    }
+    catch (error) {
+
+      console.error(error)
+
+      setAreasPermitidas([])
+
+    }
+
+  }
+
   // inicia la sesion del usuario
   const iniciarSesion = async () => {
 
@@ -121,9 +190,14 @@ function App() {
 
         const data = await response.json()
 
-        console.log(data)
-
         setUsuarioLogueado(data)
+
+        // carga las areas asignadas al usuario que ingreso
+        await obtenerAreasUsuario(
+          data.idUsuario,
+          data.administrador
+        )
+
         setLogueado(true)
         setModulo('dashboard')
 
@@ -155,6 +229,7 @@ function App() {
 
     setLogueado(false)
     setUsuarioLogueado(null)
+    setAreasPermitidas([])
     setUsuario('')
     setPassword('')
     setModulo('dashboard')
@@ -369,6 +444,8 @@ function App() {
                   <Areas
                     encuestas={encuestas}
                     obtenerEncuestas={obtenerEncuestas}
+                    areasPermitidas={areasPermitidas}
+                    usuarioLogueado={usuarioLogueado}
                   />
                 }
 
@@ -383,7 +460,11 @@ function App() {
                   modulo === 'correosArea' &&
                   tienePermisoModulo('correosArea') &&
 
-                  <CorreosArea areas={encuestas} />
+                  <CorreosArea
+                    areas={encuestas}
+                    areasPermitidas={areasPermitidas}
+                    usuarioLogueado={usuarioLogueado}
+                  />
                 }
 
                 {
@@ -404,14 +485,20 @@ function App() {
                   modulo === 'seguimientos' &&
                   tienePermisoModulo('seguimientos') &&
 
-                  <Seguimientos />
+                  <Seguimientos
+                    areasPermitidas={areasPermitidas}
+                    usuarioLogueado={usuarioLogueado}
+                  />
                 }
 
                 {
                   modulo === 'reportes' &&
                   tienePermisoModulo('reportes') &&
 
-                  <Reportes />
+                  <Reportes
+                    areasPermitidas={areasPermitidas}
+                    usuarioLogueado={usuarioLogueado}
+                  />
                 }
 
                 {
