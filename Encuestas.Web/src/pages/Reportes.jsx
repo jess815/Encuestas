@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 
-function Reportes() {
+function Reportes({
+    areasPermitidas,
+    usuarioLogueado
+}) {
 
     const [respuestas, setRespuestas] = useState([])
     const [busqueda, setBusqueda] = useState('')
@@ -17,7 +20,11 @@ function Reportes() {
 
     }, [])
 
-    // Carga las encuestas respondidas
+    // revisa si el usuario es administrador
+    const esAdministrador =
+        usuarioLogueado?.administrador === true
+
+    // carga las encuestas respondidas
     const obtenerRespuestas = async () => {
 
         try {
@@ -48,7 +55,7 @@ function Reportes() {
 
     }
 
-    // Da formato a las fechas
+    // da formato a las fechas
     const formatearFecha = (fecha) => {
 
         if (fecha === null || fecha === undefined) {
@@ -59,7 +66,7 @@ function Reportes() {
 
     }
 
-    // Limpia los filtros
+    // limpia los filtros del reporte
     const limpiarFiltros = () => {
 
         setBusqueda('')
@@ -68,7 +75,7 @@ function Reportes() {
 
     }
 
-    // Evita problemas con comillas al exportar
+    // limpia los textos antes de exportar
     const limpiarTexto = (valor) => {
 
         if (valor === null || valor === undefined) {
@@ -79,7 +86,7 @@ function Reportes() {
 
     }
 
-    // Abre el detalle de una encuesta respondida
+    // abre el detalle de la encuesta seleccionada
     const abrirDetalle = async (respuesta) => {
 
         try {
@@ -87,7 +94,8 @@ function Reportes() {
             setCargandoDetalle(true)
             setMostrarDetalle(true)
 
-            const tieneDetalle = respuesta.detalleRespuestas !== undefined &&
+            const tieneDetalle =
+                respuesta.detalleRespuestas !== undefined &&
                 respuesta.detalleRespuestas !== null
 
             if (tieneDetalle) {
@@ -97,7 +105,9 @@ function Reportes() {
             }
             else {
 
-                const response = await fetch(`/api/Respuesta/${respuesta.idRespuesta}`)
+                const response = await fetch(
+                    `/api/Respuesta/${respuesta.idRespuesta}`
+                )
 
                 if (response.ok) {
 
@@ -130,7 +140,7 @@ function Reportes() {
 
     }
 
-    // Cierra el detalle de la encuesta
+    // cierra el detalle de la encuesta
     const cerrarDetalle = () => {
 
         setRespuestaDetalle(null)
@@ -139,12 +149,76 @@ function Reportes() {
 
     }
 
-    // Exporta los resultados filtrados
+    // deja solo las respuestas de las areas permitidas
+    const respuestasPorArea = esAdministrador
+        ? respuestas
+        : respuestas.filter((respuesta) =>
+            areasPermitidas.includes(respuesta.idArea)
+        )
+
+    // obtiene las areas disponibles para el filtro
+    const areasUnicas = [
+        ...new Set(
+            respuestasPorArea.map((respuesta) =>
+                respuesta.nombreArea
+            )
+        )
+    ]
+
+    // aplica los filtros del reporte
+    const respuestasFiltradas = respuestasPorArea.filter((respuesta) => {
+
+        const textoBusqueda = busqueda.toLowerCase()
+
+        const coincideBusqueda =
+            (respuesta.nombreSocio || '')
+                .toLowerCase()
+                .includes(textoBusqueda) ||
+
+            (respuesta.evento || '')
+                .toLowerCase()
+                .includes(textoBusqueda) ||
+
+            (respuesta.comentario || '')
+                .toLowerCase()
+                .includes(textoBusqueda) ||
+
+            (respuesta.nombreArea || '')
+                .toLowerCase()
+                .includes(textoBusqueda)
+
+        const coincideArea =
+            areaFiltro === '' ||
+            respuesta.nombreArea === areaFiltro
+
+        const coincideAlerta =
+            alertaFiltro === '' ||
+            (
+                alertaFiltro === 'si' &&
+                respuesta.alerta === true
+            ) ||
+            (
+                alertaFiltro === 'no' &&
+                respuesta.alerta === false
+            )
+
+        return (
+            coincideBusqueda &&
+            coincideArea &&
+            coincideAlerta
+        )
+
+    })
+
+    // exporta solo los resultados que el usuario puede ver
     const exportarExcel = () => {
 
         if (respuestasFiltradas.length === 0) {
+
             alert('No hay datos para exportar')
+
             return
+
         }
 
         const separador = ';'
@@ -160,13 +234,22 @@ function Reportes() {
         ]
 
         const filas = respuestasFiltradas.map((respuesta) => [
+
             respuesta.idRespuesta,
             respuesta.nombreArea,
-            respuesta.nombreSocio || respuesta.evento || 'No indicado',
-            respuesta.comentario || 'Sin comentario',
-            respuesta.notaGeneral !== null ? respuesta.notaGeneral : 'N/A',
-            respuesta.alerta ? 'Sí' : 'No',
+            respuesta.nombreSocio ||
+                respuesta.evento ||
+                'No indicado',
+            respuesta.comentario ||
+                'Sin comentario',
+            respuesta.notaGeneral !== null
+                ? respuesta.notaGeneral
+                : 'N/A',
+            respuesta.alerta
+                ? 'Sí'
+                : 'No',
             formatearFecha(respuesta.fechaRespuesta)
+
         ])
 
         const contenidoTabla = [
@@ -174,52 +257,36 @@ function Reportes() {
             ...filas
         ]
             .map((fila) =>
-                fila.map((columna) => `"${limpiarTexto(columna)}"`).join(separador)
+                fila
+                    .map((columna) =>
+                        `"${limpiarTexto(columna)}"`
+                    )
+                    .join(separador)
             )
             .join('\n')
 
-        const contenido = `sep=;\n${contenidoTabla}`
+        const contenido =
+            `sep=;\n${contenidoTabla}`
 
-        const archivo = new Blob([`\uFEFF${contenido}`], {
-            type: 'text/csv;charset=utf-8;'
-        })
+        const archivo = new Blob(
+            [`\uFEFF${contenido}`],
+            {
+                type: 'text/csv;charset=utf-8;'
+            }
+        )
 
         const url = URL.createObjectURL(archivo)
 
         const enlace = document.createElement('a')
+
         enlace.href = url
         enlace.download = 'reporte_encuestas.csv'
+
         enlace.click()
 
         URL.revokeObjectURL(url)
 
     }
-
-    // Obtiene las áreas únicas para el filtro
-    const areasUnicas = [...new Set(respuestas.map((respuesta) => respuesta.nombreArea))]
-
-    // Aplica los filtros del reporte
-    const respuestasFiltradas = respuestas.filter((respuesta) => {
-
-        const textoBusqueda = busqueda.toLowerCase()
-
-        const coincideBusqueda =
-            (respuesta.nombreSocio || '').toLowerCase().includes(textoBusqueda) ||
-            (respuesta.evento || '').toLowerCase().includes(textoBusqueda) ||
-            (respuesta.comentario || '').toLowerCase().includes(textoBusqueda) ||
-            (respuesta.nombreArea || '').toLowerCase().includes(textoBusqueda)
-
-        const coincideArea =
-            areaFiltro === '' || respuesta.nombreArea === areaFiltro
-
-        const coincideAlerta =
-            alertaFiltro === '' ||
-            (alertaFiltro === 'si' && respuesta.alerta === true) ||
-            (alertaFiltro === 'no' && respuesta.alerta === false)
-
-        return coincideBusqueda && coincideArea && coincideAlerta
-
-    })
 
     return (
 
@@ -257,7 +324,9 @@ function Reportes() {
                         placeholder="Buscar por socio, evento, área o comentario"
                         className="input"
                         value={busqueda}
-                        onChange={(e) => setBusqueda(e.target.value)}
+                        onChange={(e) =>
+                            setBusqueda(e.target.value)
+                        }
                     />
 
                     <label>
@@ -267,8 +336,11 @@ function Reportes() {
                     <select
                         className="input"
                         value={areaFiltro}
-                        onChange={(e) => setAreaFiltro(e.target.value)}
+                        onChange={(e) =>
+                            setAreaFiltro(e.target.value)
+                        }
                     >
+
                         <option value="">
                             Todas las áreas
                         </option>
@@ -285,6 +357,7 @@ function Reportes() {
 
                             ))
                         }
+
                     </select>
 
                     <label>
@@ -294,8 +367,11 @@ function Reportes() {
                     <select
                         className="input"
                         value={alertaFiltro}
-                        onChange={(e) => setAlertaFiltro(e.target.value)}
+                        onChange={(e) =>
+                            setAlertaFiltro(e.target.value)
+                        }
                     >
+
                         <option value="">
                             Todas
                         </option>
@@ -307,6 +383,7 @@ function Reportes() {
                         <option value="no">
                             Sin alerta
                         </option>
+
                     </select>
 
                     <button
@@ -322,89 +399,116 @@ function Reportes() {
                     Total de resultados: {respuestasFiltradas.length}
                 </p>
 
-                <table className="tabla">
+                {
+                    respuestasFiltradas.length === 0 ?
 
-                    <thead>
+                        <div className="card-dashboard">
 
-                        <tr>
-                            <th>ID</th>
-                            <th>Área</th>
-                            <th>Socio / Evento</th>
-                            <th>Comentario</th>
-                            <th>Nota general</th>
-                            <th>Alerta</th>
-                            <th>Fecha respuesta</th>
-                            <th>Acciones</th>
-                        </tr>
+                            <h3>
+                                Sin resultados
+                            </h3>
 
-                    </thead>
+                            <p>
+                                No hay encuestas disponibles para las áreas asignadas a su usuario.
+                            </p>
 
-                    <tbody>
+                        </div>
 
-                        {
-                            respuestasFiltradas.map((respuesta) => (
+                        :
 
-                                <tr key={respuesta.idRespuesta}>
+                        <table className="tabla">
 
-                                    <td>
-                                        {respuesta.idRespuesta}
-                                    </td>
+                            <thead>
 
-                                    <td>
-                                        {respuesta.nombreArea}
-                                    </td>
-
-                                    <td>
-                                        {
-                                            respuesta.nombreSocio || respuesta.evento || 'No indicado'
-                                        }
-                                    </td>
-
-                                    <td>
-                                        {
-                                            respuesta.comentario || 'Sin comentario'
-                                        }
-                                    </td>
-
-                                    <td>
-                                        {
-                                            respuesta.notaGeneral !== null
-                                                ? respuesta.notaGeneral
-                                                : 'N/A'
-                                        }
-                                    </td>
-
-                                    <td>
-                                        {
-                                            respuesta.alerta
-                                                ? 'Sí'
-                                                : 'No'
-                                        }
-                                    </td>
-
-                                    <td>
-                                        {formatearFecha(respuesta.fechaRespuesta)}
-                                    </td>
-
-                                    <td>
-
-                                        <button
-                                            className="boton-tabla editar"
-                                            onClick={() => abrirDetalle(respuesta)}
-                                        >
-                                            Ver detalle
-                                        </button>
-
-                                    </td>
-
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Área</th>
+                                    <th>Socio / Evento</th>
+                                    <th>Comentario</th>
+                                    <th>Nota general</th>
+                                    <th>Alerta</th>
+                                    <th>Fecha respuesta</th>
+                                    <th>Acciones</th>
                                 </tr>
 
-                            ))
-                        }
+                            </thead>
 
-                    </tbody>
+                            <tbody>
 
-                </table>
+                                {
+                                    respuestasFiltradas.map((respuesta) => (
+
+                                        <tr key={respuesta.idRespuesta}>
+
+                                            <td>
+                                                {respuesta.idRespuesta}
+                                            </td>
+
+                                            <td>
+                                                {respuesta.nombreArea}
+                                            </td>
+
+                                            <td>
+                                                {
+                                                    respuesta.nombreSocio ||
+                                                    respuesta.evento ||
+                                                    'No indicado'
+                                                }
+                                            </td>
+
+                                            <td>
+                                                {
+                                                    respuesta.comentario ||
+                                                    'Sin comentario'
+                                                }
+                                            </td>
+
+                                            <td>
+                                                {
+                                                    respuesta.notaGeneral !== null
+                                                        ? respuesta.notaGeneral
+                                                        : 'N/A'
+                                                }
+                                            </td>
+
+                                            <td>
+                                                {
+                                                    respuesta.alerta
+                                                        ? 'Sí'
+                                                        : 'No'
+                                                }
+                                            </td>
+
+                                            <td>
+                                                {
+                                                    formatearFecha(
+                                                        respuesta.fechaRespuesta
+                                                    )
+                                                }
+                                            </td>
+
+                                            <td>
+
+                                                <button
+                                                    className="boton-tabla editar"
+                                                    onClick={() =>
+                                                        abrirDetalle(respuesta)
+                                                    }
+                                                >
+                                                    Ver detalle
+                                                </button>
+
+                                            </td>
+
+                                        </tr>
+
+                                    ))
+                                }
+
+                            </tbody>
+
+                        </table>
+                }
 
             </div>
 
@@ -435,23 +539,34 @@ function Reportes() {
                                     <div className="detalle-resumen">
 
                                         <p>
-                                            <strong>ID:</strong> {respuestaDetalle.idRespuesta}
+                                            <strong>ID:</strong>{' '}
+                                            {respuestaDetalle.idRespuesta}
                                         </p>
 
                                         <p>
-                                            <strong>Área:</strong> {respuestaDetalle.nombreArea}
+                                            <strong>Área:</strong>{' '}
+                                            {respuestaDetalle.nombreArea}
                                         </p>
 
                                         <p>
-                                            <strong>Socio:</strong> {respuestaDetalle.nombreSocio || 'No indicado'}
+                                            <strong>Socio:</strong>{' '}
+                                            {
+                                                respuestaDetalle.nombreSocio ||
+                                                'No indicado'
+                                            }
                                         </p>
 
                                         <p>
-                                            <strong>Evento:</strong> {respuestaDetalle.evento || 'No indicado'}
+                                            <strong>Evento:</strong>{' '}
+                                            {
+                                                respuestaDetalle.evento ||
+                                                'No indicado'
+                                            }
                                         </p>
 
                                         <p>
-                                            <strong>Nota general:</strong> {
+                                            <strong>Nota general:</strong>{' '}
+                                            {
                                                 respuestaDetalle.notaGeneral !== null
                                                     ? `${respuestaDetalle.notaGeneral}%`
                                                     : 'N/A'
@@ -459,7 +574,8 @@ function Reportes() {
                                         </p>
 
                                         <p>
-                                            <strong>Alerta:</strong> {
+                                            <strong>Alerta:</strong>{' '}
+                                            {
                                                 respuestaDetalle.alerta
                                                     ? 'Sí'
                                                     : 'No'
@@ -467,11 +583,20 @@ function Reportes() {
                                         </p>
 
                                         <p>
-                                            <strong>Fecha:</strong> {formatearFecha(respuestaDetalle.fechaRespuesta)}
+                                            <strong>Fecha:</strong>{' '}
+                                            {
+                                                formatearFecha(
+                                                    respuestaDetalle.fechaRespuesta
+                                                )
+                                            }
                                         </p>
 
                                         <p>
-                                            <strong>Comentario:</strong> {respuestaDetalle.comentario || 'Sin comentario'}
+                                            <strong>Comentario:</strong>{' '}
+                                            {
+                                                respuestaDetalle.comentario ||
+                                                'Sin comentario'
+                                            }
                                         </p>
 
                                     </div>
@@ -482,40 +607,44 @@ function Reportes() {
 
                                     {
                                         respuestaDetalle.detalleRespuestas !== undefined &&
-                                            respuestaDetalle.detalleRespuestas !== null &&
-                                            respuestaDetalle.detalleRespuestas.length > 0 ?
+                                        respuestaDetalle.detalleRespuestas !== null &&
+                                        respuestaDetalle.detalleRespuestas.length > 0 ?
 
                                             <div className="detalle-preguntas">
 
                                                 {
-                                                    respuestaDetalle.detalleRespuestas.map((detalle, index) => (
+                                                    respuestaDetalle.detalleRespuestas.map(
+                                                        (detalle, index) => (
 
-                                                        <div
-                                                            key={detalle.idRespuestaDetalle}
-                                                            className="detalle-pregunta-card"
-                                                        >
+                                                            <div
+                                                                key={detalle.idRespuestaDetalle}
+                                                                className="detalle-pregunta-card"
+                                                            >
 
-                                                            <span>
-                                                                Pregunta {index + 1}
-                                                            </span>
+                                                                <span>
+                                                                    Pregunta {index + 1}
+                                                                </span>
 
-                                                            <p>
-                                                                <strong>
-                                                                    {detalle.textoPregunta}
-                                                                </strong>
-                                                            </p>
+                                                                <p>
 
-                                                            <p>
-                                                                Respuesta: {detalle.textoOpcion}
-                                                            </p>
+                                                                    <strong>
+                                                                        {detalle.textoPregunta}
+                                                                    </strong>
 
-                                                            <p>
-                                                                Valor: {detalle.valorCalculado}
-                                                            </p>
+                                                                </p>
 
-                                                        </div>
+                                                                <p>
+                                                                    Respuesta: {detalle.textoOpcion}
+                                                                </p>
 
-                                                    ))
+                                                                <p>
+                                                                    Valor: {detalle.valorCalculado}
+                                                                </p>
+
+                                                            </div>
+
+                                                        )
+                                                    )
                                                 }
 
                                             </div>
