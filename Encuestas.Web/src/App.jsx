@@ -28,10 +28,12 @@ function App() {
     cantidadComentarios: 0
   })
 
+  // obtiene la ruta actual para saber si es una encuesta
   const rutaActual = window.location.pathname.toLowerCase()
 
   const esRutaEncuesta = rutaActual.startsWith('/encuestas/')
 
+  // obtiene el nombre del area desde la ruta
   const slugArea = rutaActual
     .replace('/encuestas/', '')
     .replace('/', '')
@@ -43,7 +45,7 @@ function App() {
 
   }, [])
 
-  // Carga las áreas
+  // carga las areas registradas
   const obtenerEncuestas = async () => {
 
     try {
@@ -69,7 +71,7 @@ function App() {
 
   }
 
-  // Carga los datos reales del dashboard
+  // carga los datos del dashboard
   const obtenerDashboard = async () => {
 
     try {
@@ -93,7 +95,7 @@ function App() {
 
   }
 
-  // Inicia sesión en el sistema
+  // inicia la sesion del usuario
   const iniciarSesion = async () => {
 
     try {
@@ -123,6 +125,7 @@ function App() {
 
         setUsuarioLogueado(data)
         setLogueado(true)
+        setModulo('dashboard')
 
       }
       else {
@@ -147,7 +150,7 @@ function App() {
 
   }
 
-  // Cierra la sesión actual
+  // cierra la sesion y limpia los datos del usuario
   const cerrarSesion = () => {
 
     setLogueado(false)
@@ -158,6 +161,54 @@ function App() {
 
   }
 
+  // valida los permisos del usuario para cada modulo
+  const tienePermisoModulo = (moduloActual) => {
+
+    const esAdministrador =
+      usuarioLogueado?.administrador === true
+
+    const puedeEditarEncuestas =
+      esAdministrador ||
+      usuarioLogueado?.editaEncuesta === true
+
+    const puedeVerReportes =
+      esAdministrador ||
+      usuarioLogueado?.exportaExcel === true
+
+    // todos los usuarios pueden ver el dashboard
+    if (moduloActual === 'dashboard') {
+      return true
+    }
+
+    // modulos relacionados con la administracion de encuestas
+    if (
+      moduloActual === 'encuestas' ||
+      moduloActual === 'opciones' ||
+      moduloActual === 'correosArea' ||
+      moduloActual === 'seguimientos'
+    ) {
+      return puedeEditarEncuestas
+    }
+
+    // modulos exclusivos para administradores
+    if (
+      moduloActual === 'usuarios' ||
+      moduloActual === 'usuarioAreas' ||
+      moduloActual === 'bitacora'
+    ) {
+      return esAdministrador
+    }
+
+    // modulo de reportes
+    if (moduloActual === 'reportes') {
+      return puedeVerReportes
+    }
+
+    return false
+
+  }
+
+  // las encuestas se abren sin ingresar al panel administrativo
   if (esRutaEncuesta) {
 
     return (
@@ -209,10 +260,9 @@ function App() {
               >
 
                 {
-                  cargando ?
-                    'Ingresando...'
-                    :
-                    'Ingresar'
+                  cargando
+                    ? 'Ingresando...'
+                    : 'Ingresar'
                 }
 
               </button>
@@ -232,12 +282,32 @@ function App() {
 
             <div className="dashboard-layout">
 
-              <Sidebar setModulo={setModulo} />
+              <Sidebar
+                setModulo={setModulo}
+                usuarioLogueado={usuarioLogueado}
+              />
 
               <div className="contenido-dashboard">
 
                 {
+                  !tienePermisoModulo(modulo) &&
+
+                  <div className="card-dashboard">
+
+                    <h3>
+                      Acceso no permitido
+                    </h3>
+
+                    <p>
+                      Su usuario no cuenta con permisos para ingresar a este módulo.
+                    </p>
+
+                  </div>
+                }
+
+                {
                   modulo === 'dashboard' &&
+                  tienePermisoModulo('dashboard') &&
 
                   <div className="dashboard-resumen">
 
@@ -294,6 +364,7 @@ function App() {
 
                 {
                   modulo === 'encuestas' &&
+                  tienePermisoModulo('encuestas') &&
 
                   <Areas
                     encuestas={encuestas}
@@ -303,42 +374,49 @@ function App() {
 
                 {
                   modulo === 'opciones' &&
+                  tienePermisoModulo('opciones') &&
 
                   <Opciones />
                 }
 
                 {
                   modulo === 'correosArea' &&
+                  tienePermisoModulo('correosArea') &&
 
                   <CorreosArea areas={encuestas} />
                 }
 
                 {
                   modulo === 'usuarios' &&
+                  tienePermisoModulo('usuarios') &&
 
                   <Usuarios />
                 }
 
                 {
                   modulo === 'usuarioAreas' &&
+                  tienePermisoModulo('usuarioAreas') &&
 
                   <UsuarioAreas areas={encuestas} />
                 }
 
                 {
                   modulo === 'seguimientos' &&
+                  tienePermisoModulo('seguimientos') &&
 
                   <Seguimientos />
                 }
 
                 {
                   modulo === 'reportes' &&
+                  tienePermisoModulo('reportes') &&
 
                   <Reportes />
                 }
 
                 {
                   modulo === 'bitacora' &&
+                  tienePermisoModulo('bitacora') &&
 
                   <Bitacora />
                 }

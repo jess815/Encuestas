@@ -8,10 +8,10 @@ function Areas({ encuestas, obtenerEncuestas }) {
     const [areaEditar, setAreaEditar] = useState(null)
     const [areaSeleccionada, setAreaSeleccionada] = useState(null)
 
-    // Convierte el nombre del área para usarlo en la URL
-    const crearSlug = (texto) => {
+    // Convierte el nombre del área en una ruta válida para la encuesta
+    const crearSlug = (texto = '') => {
 
-        return texto
+        return String(texto)
             .toLowerCase()
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '')
@@ -20,11 +20,19 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
-    // Copia el enlace de la encuesta
-    const copiarEnlace = async (area) => {
+    // Construye el enlace completo de la encuesta
+    const obtenerEnlaceEncuesta = (area) => {
 
         const slug = crearSlug(area.nombre)
-        const enlace = `${window.location.origin}/encuestas/${slug}`
+
+        return `${window.location.origin}/encuestas/${slug}`
+
+    }
+
+    // Copia el enlace de la encuesta al portapapeles
+    const copiarEnlace = async (area) => {
+
+        const enlace = obtenerEnlaceEncuesta(area)
 
         try {
 
@@ -43,7 +51,16 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
-    // Abre el modal para crear
+    // Abre la encuesta en otra pestaña
+    const abrirEncuesta = (area) => {
+
+        const enlace = obtenerEnlaceEncuesta(area)
+
+        window.open(enlace, '_blank')
+
+    }
+
+    // Abre el modal para crear una nueva área
     const abrirNuevo = () => {
 
         setAreaEditar(null)
@@ -51,7 +68,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
-    // Abre el modal para editar
+    // Abre el modal para editar un área
     const abrirEditar = (area) => {
 
         setAreaEditar(area)
@@ -59,7 +76,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
-    // Cierra el modal
+    // Cierra el modal de área
     const cerrarModal = () => {
 
         setAreaEditar(null)
@@ -67,7 +84,7 @@ function Areas({ encuestas, obtenerEncuestas }) {
 
     }
 
-    // Elimina un área
+    // Elimina un área registrada
     const eliminarArea = async (idArea) => {
 
         const confirmar = window.confirm('¿Está segura de eliminar esta área?')
@@ -180,6 +197,13 @@ function Areas({ encuestas, obtenerEncuestas }) {
                                     </td>
 
                                     <td>
+
+                                        <button
+                                            className="boton-tabla editar"
+                                            onClick={() => abrirEncuesta(area)}
+                                        >
+                                            Abrir encuesta
+                                        </button>
 
                                         <button
                                             className="boton-tabla editar"

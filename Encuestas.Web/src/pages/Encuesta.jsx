@@ -110,6 +110,17 @@ function Encuesta({ slugArea }) {
 
     }
 
+    // Quita la respuesta seleccionada de una pregunta
+    const quitarRespuesta = (pregunta) => {
+
+        const nuevasRespuestas = { ...respuestasSeleccionadas }
+
+        delete nuevasRespuestas[pregunta.idPregunta]
+
+        setRespuestasSeleccionadas(nuevasRespuestas)
+
+    }
+
     // Obtiene las preguntas que todavía no tienen respuesta
     const obtenerPreguntasSinResponder = () => {
 
@@ -534,6 +545,18 @@ function Encuesta({ slugArea }) {
                                         }
 
                                     </div>
+
+                                    {
+                                        respuestasSeleccionadas[pregunta.idPregunta] !== undefined &&
+
+                                        <button
+                                            type="button"
+                                            className="boton-quitar-respuesta"
+                                            onClick={() => quitarRespuesta(pregunta)}
+                                        >
+                                            Quitar respuesta
+                                        </button>
+                                    }
 
                                 </div>
 

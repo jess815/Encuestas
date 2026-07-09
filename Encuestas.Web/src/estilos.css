@@ -752,7 +752,7 @@ textarea.input{
 }
 
 .mensaje-pregunta-pendiente{
-  color: #555555;
+  color: #d11010;
   font-size: 14px;
   font-weight: 600;
   margin: -6px 0 14px 0;
@@ -770,7 +770,7 @@ textarea.input{
 }
 
 .aviso-encuesta-incompleta strong{
-  color: #333333;
+  color: #bb5353;
 }
 
 .aviso-encuesta-incompleta p{
@@ -779,7 +779,7 @@ textarea.input{
 }
 
 .pregunta-pendiente{
-  border-left-color: #777777;
+  border-left-color: #ec6161;
   background-color: #fcfcfc;
 }
 
@@ -895,6 +895,79 @@ textarea.input{
   .encuesta-titulo-progreso{
     flex-direction: column;
     align-items: flex-start;
+  }
+
+}
+
+/* Botón para quitar respuesta */
+
+.boton-quitar-respuesta{
+  margin-top: 14px;
+  border: none;
+  background-color: transparent;
+  color: #555555;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.boton-quitar-respuesta:hover{
+  color: var(--verde-crcc);
+  text-decoration: underline;
+}
+
+/* Detalle de reportes */
+
+.modal-detalle-reporte{
+  max-width: 820px;
+}
+
+.detalle-resumen{
+  background-color: #f8f8f8;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 14px 0 18px 0;
+}
+
+.detalle-resumen p{
+  margin: 7px 0;
+  color: #333333;
+}
+
+.detalle-preguntas{
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.detalle-pregunta-card{
+  border: 1px solid #dddddd;
+  border-left: 5px solid var(--verde-crcc);
+  border-radius: 12px;
+  padding: 14px;
+  background-color: #ffffff;
+}
+
+.detalle-pregunta-card span{
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--verde-crcc);
+  margin-bottom: 6px;
+}
+
+.detalle-pregunta-card p{
+  margin: 6px 0;
+  color: #333333;
+}
+
+@media (max-width: 700px){
+
+  .modal-detalle-reporte{
+    width: 92%;
+    max-height: 88vh;
+    overflow-y: auto;
   }
 
 }
