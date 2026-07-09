@@ -42,7 +42,6 @@ function App() {
   useEffect(() => {
 
     obtenerEncuestas()
-    obtenerDashboard()
 
   }, [])
 
@@ -75,12 +74,14 @@ function App() {
 
   }
 
-  // carga los datos del dashboard
-  const obtenerDashboard = async () => {
+  // carga los datos del dashboard segun el usuario
+  const obtenerDashboard = async (idUsuario) => {
 
     try {
 
-      const response = await fetch('/api/Dashboard')
+      const response = await fetch(
+        `/api/Dashboard?idUsuario=${idUsuario}`
+      )
 
       if (response.ok) {
 
@@ -113,7 +114,9 @@ function App() {
 
           const data = await response.json()
 
-          const idsAreas = data.map((area) => area.idArea)
+          const idsAreas = data.map((area) =>
+            area.idArea
+          )
 
           setAreasPermitidas(idsAreas)
 
@@ -192,10 +195,14 @@ function App() {
 
         setUsuarioLogueado(data)
 
-        // carga las areas asignadas al usuario que ingreso
+        // carga las areas y el dashboard del usuario que ingreso
         await obtenerAreasUsuario(
           data.idUsuario,
           data.administrador
+        )
+
+        await obtenerDashboard(
+          data.idUsuario
         )
 
         setLogueado(true)
@@ -233,6 +240,13 @@ function App() {
     setUsuario('')
     setPassword('')
     setModulo('dashboard')
+
+    setDashboardDatos({
+      cantidadEncuestas: 0,
+      promedioGeneral: 0,
+      cantidadAlertas: 0,
+      cantidadComentarios: 0
+    })
 
   }
 

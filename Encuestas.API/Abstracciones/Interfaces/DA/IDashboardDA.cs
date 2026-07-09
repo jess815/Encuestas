@@ -4,6 +4,6 @@ namespace Abstracciones.Interfaces.DA
 {
     public interface IDashboardDA
     {
-        Task<DashboardResponse> ObtenerDashboard();
+        Task<DashboardResponse> ObtenerDashboard(int idUsuario);
     }
 }

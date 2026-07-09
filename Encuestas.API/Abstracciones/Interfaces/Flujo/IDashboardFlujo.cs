@@ -4,6 +4,6 @@ namespace Abstracciones.Interfaces.Flujo
 {
     public interface IDashboardFlujo
     {
-        Task<DashboardResponse> ObtenerDashboard();
+        Task<DashboardResponse> ObtenerDashboard(int idUsuario);
     }
 }

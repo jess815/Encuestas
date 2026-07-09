@@ -19,10 +19,13 @@ namespace API.Controllers
             _logger = logger;
         }
 
+        // obtiene el dashboard segun las areas del usuario
         [HttpGet]
-        public async Task<IActionResult> ObtenerDashboard()
+        public async Task<IActionResult> ObtenerDashboard(
+            [FromQuery] int idUsuario)
         {
-            var resultado = await _dashboardFlujo.ObtenerDashboard();
+            var resultado =
+                await _dashboardFlujo.ObtenerDashboard(idUsuario);
 
             return Ok(resultado);
         }

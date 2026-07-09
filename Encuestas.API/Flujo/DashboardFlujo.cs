@@ -13,9 +13,10 @@ namespace Flujo
             _dashboardDA = dashboardDA;
         }
 
-        public async Task<DashboardResponse> ObtenerDashboard()
+        // obtiene los datos del dashboard segun el usuario
+        public async Task<DashboardResponse> ObtenerDashboard(int idUsuario)
         {
-            return await _dashboardDA.ObtenerDashboard();
+            return await _dashboardDA.ObtenerDashboard(idUsuario);
         }
     }
 }

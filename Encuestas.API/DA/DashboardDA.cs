@@ -16,21 +16,66 @@ namespace DA
             _sqlConnection = _repositorioDapper.ObtenerRepositorio();
         }
 
-        public async Task<DashboardResponse> ObtenerDashboard()
+        // calcula el dashboard con las areas que puede ver el usuario
+        public async Task<DashboardResponse> ObtenerDashboard(int idUsuario)
         {
-            string query = @"SELECT
-                                COUNT(*) AS CantidadEncuestas,
-                                ISNULL(AVG(NotaGeneral), 0) AS PromedioGeneral,
-                                SUM(CASE WHEN Alerta = 1 THEN 1 ELSE 0 END) AS CantidadAlertas,
-                                SUM(CASE WHEN Comentario IS NOT NULL 
-                                          AND Comentario <> '' 
-                                         THEN 1 ELSE 0 END) AS CantidadComentarios
-                            FROM Respuestas";
+            string query = @"
+                SELECT
+                    COUNT(*) AS CantidadEncuestas,
+                    ISNULL(AVG(R.NotaGeneral), 0) AS PromedioGeneral,
+                    ISNULL(
+                        SUM(
+                            CASE 
+                                WHEN R.Alerta = 1 THEN 1 
+                                ELSE 0 
+                            END
+                        ), 
+                        0
+                    ) AS CantidadAlertas,
+                    ISNULL(
+                        SUM(
+                            CASE 
+                                WHEN R.Comentario IS NOT NULL
+                                     AND R.Comentario <> ''
+                                THEN 1
+                                ELSE 0
+                            END
+                        ),
+                        0
+                    ) AS CantidadComentarios
+                FROM Respuestas R
+                WHERE
+                    EXISTS
+                    (
+                        SELECT 1
+                        FROM Usuarios U
+                        WHERE U.IdUsuario = @IdUsuario
+                        AND U.Administrador = 1
+                    )
+                    OR
+                    EXISTS
+                    (
+                        SELECT 1
+                        FROM UsuarioArea UA
+                        WHERE UA.IdUsuario = @IdUsuario
+                        AND UA.IdArea = R.IdArea
+                        AND UA.VerArea = 1
+                    );";
+
+            // envia el usuario para aplicar el filtro de areas
+            var parametros = new
+            {
+                IdUsuario = idUsuario
+            };
 
             var resultadoConsulta =
-                await _sqlConnection.QueryFirstOrDefaultAsync<DashboardResponse>(query);
+                await _sqlConnection
+                    .QueryFirstOrDefaultAsync<DashboardResponse>(
+                        query,
+                        parametros
+                    );
 
-            return resultadoConsulta;
+            return resultadoConsulta ?? new DashboardResponse();
         }
     }
 }

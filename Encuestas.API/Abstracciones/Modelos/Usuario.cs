@@ -4,23 +4,37 @@ namespace Abstracciones.Modelos
 {
     public class UsuarioBase
     {
-        [Required(ErrorMessage = "El nombre es requerido")]
+        [Required]
         [StringLength(150)]
         public string Nombre { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El usuario es requerido")]
+        [Required]
         [StringLength(50)]
         public string Usuario { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "La contraseña es requerida")]
+        [Required]
         [StringLength(255)]
         public string PasswordHash { get; set; } = string.Empty;
 
+        // permisos generales del usuario
         public bool Administrador { get; set; }
 
         public bool EditaEncuesta { get; set; }
 
         public bool ExportaExcel { get; set; }
+
+        // areas que puede ver el usuario
+        public bool Ceibo { get; set; }
+
+        public bool Faroles { get; set; }
+
+        public bool Hoyo19 { get; set; }
+
+        public bool PinRojo { get; set; }
+
+        public bool CanaBrava { get; set; }
+
+        public bool Eventos { get; set; }
 
         public bool Activo { get; set; }
     }
@@ -38,21 +52,35 @@ namespace Abstracciones.Modelos
 
         public string Usuario { get; set; } = string.Empty;
 
+        // permisos generales del usuario
         public bool Administrador { get; set; }
 
         public bool EditaEncuesta { get; set; }
 
         public bool ExportaExcel { get; set; }
 
+        // areas que puede ver el usuario
+        public bool Ceibo { get; set; }
+
+        public bool Faroles { get; set; }
+
+        public bool Hoyo19 { get; set; }
+
+        public bool PinRojo { get; set; }
+
+        public bool CanaBrava { get; set; }
+
+        public bool Eventos { get; set; }
+
         public bool Activo { get; set; }
     }
 
     public class LoginRequest
     {
-        [Required(ErrorMessage = "El usuario es requerido")]
+        [Required]
         public string Usuario { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "La contraseña es requerida")]
+        [Required]
         public string Password { get; set; } = string.Empty;
     }
 }

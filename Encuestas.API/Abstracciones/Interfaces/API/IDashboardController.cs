@@ -4,6 +4,6 @@ namespace Abstracciones.Interfaces.API
 {
     public interface IDashboardController
     {
-        Task<IActionResult> ObtenerDashboard();
+        Task<IActionResult> ObtenerDashboard(int idUsuario);
     }
 }
