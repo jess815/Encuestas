@@ -12,6 +12,13 @@ namespace Abstracciones.Modelos
         [StringLength(20)]
         public string Tipo { get; set; }
 
+        // correos configurados para recibir las encuestas
+        [StringLength(255)]
+        public string? CorreoGeneral { get; set; }
+
+        [StringLength(255)]
+        public string? CorreoArea { get; set; }
+
         public bool Activo { get; set; }
     }
 

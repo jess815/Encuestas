@@ -7,6 +7,6 @@
     PRIMARY KEY CLUSTERED ([idRespuestaDetalle] ASC),
     FOREIGN KEY ([idOpcion]) REFERENCES [dbo].[Opciones] ([idOpcion]),
     FOREIGN KEY ([idPregunta]) REFERENCES [dbo].[Preguntas] ([idPregunta]),
-    FOREIGN KEY ([idRespuesta]) REFERENCES [dbo].[Respuestas] ([idRespuesta])
+    CONSTRAINT [FK__Respuesta__idRes__628FA481] FOREIGN KEY ([idRespuesta]) REFERENCES [dbo].[Respuestas] ([idRespuesta]) ON DELETE CASCADE
 );
 

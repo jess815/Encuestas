@@ -13,7 +13,7 @@ function Usuarios() {
 
     }, [])
 
-    // Carga los usuarios desde el API
+    // carga los usuarios desde el api
     const obtenerUsuarios = async () => {
 
         try {
@@ -44,7 +44,7 @@ function Usuarios() {
 
     }
 
-    // Abre el modal para crear
+    // abre el modal para crear un usuario
     const abrirNuevo = () => {
 
         setUsuarioEditar(null)
@@ -52,7 +52,7 @@ function Usuarios() {
 
     }
 
-    // Abre el modal para editar
+    // abre el modal para editar un usuario
     const abrirEditar = (usuario) => {
 
         setUsuarioEditar(usuario)
@@ -60,7 +60,7 @@ function Usuarios() {
 
     }
 
-    // Cierra el modal
+    // cierra el modal
     const cerrarModal = () => {
 
         setUsuarioEditar(null)
@@ -68,20 +68,117 @@ function Usuarios() {
 
     }
 
-    // Elimina un usuario
+    // obtiene los permisos del usuario
+    const obtenerPermisos = (usuario) => {
+
+        if (usuario.administrador) {
+
+            return 'Administrador'
+
+        }
+
+        const permisos = []
+
+        if (usuario.editaEncuesta) {
+
+            permisos.push('Edita encuestas')
+
+        }
+
+        if (usuario.exportaExcel) {
+
+            permisos.push('Exporta reportes')
+
+        }
+
+        if (permisos.length === 0) {
+
+            return 'Sin permisos adicionales'
+
+        }
+
+        return permisos.join(', ')
+
+    }
+
+    // obtiene las areas asignadas al usuario
+    const obtenerAreas = (usuario) => {
+
+        if (usuario.administrador) {
+
+            return 'Todas las áreas'
+
+        }
+
+        const areas = []
+
+        if (usuario.ceibo) {
+
+            areas.push('El Ceibo')
+
+        }
+
+        if (usuario.faroles) {
+
+            areas.push('Faroles')
+
+        }
+
+        if (usuario.hoyo19) {
+
+            areas.push('Hoyo 19')
+
+        }
+
+        if (usuario.pinRojo) {
+
+            areas.push('Pin Rojo')
+
+        }
+
+        if (usuario.canaBrava) {
+
+            areas.push('Caña Brava')
+
+        }
+
+        if (usuario.eventos) {
+
+            areas.push('Eventos')
+
+        }
+
+        if (areas.length === 0) {
+
+            return 'Sin áreas asignadas'
+
+        }
+
+        return areas.join(', ')
+
+    }
+
+    // elimina un usuario
     const eliminarUsuario = async (idUsuario) => {
 
-        const confirmar = window.confirm('¿Está segura de eliminar este usuario?')
+        const confirmar = window.confirm(
+            '¿Está segura de eliminar este usuario?'
+        )
 
         if (!confirmar) {
+
             return
+
         }
 
         try {
 
-            const response = await fetch(`/api/Usuario/${idUsuario}`, {
-                method: 'DELETE'
-            })
+            const response = await fetch(
+                `/api/Usuario/${idUsuario}`,
+                {
+                    method: 'DELETE'
+                }
+            )
 
             if (response.ok) {
 
@@ -113,9 +210,17 @@ function Usuarios() {
 
                 <div className="tabla-header">
 
-                    <h2>
-                        Administración de Usuarios
-                    </h2>
+                    <div>
+
+                        <h2>
+                            Administración de Usuarios
+                        </h2>
+
+                        <p>
+                            Configure los permisos y las áreas que puede ver cada usuario.
+                        </p>
+
+                    </div>
 
                     <button
                         className="boton-agregar"
@@ -131,12 +236,10 @@ function Usuarios() {
                     <thead>
 
                         <tr>
-                            <th>ID</th>
                             <th>Nombre</th>
                             <th>Usuario</th>
-                            <th>Administrador</th>
-                            <th>Edita encuesta</th>
-                            <th>Exporta Excel</th>
+                            <th>Permisos</th>
+                            <th>Áreas asignadas</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -151,10 +254,6 @@ function Usuarios() {
                                 <tr key={usuario.idUsuario}>
 
                                     <td>
-                                        {usuario.idUsuario}
-                                    </td>
-
-                                    <td>
                                         {usuario.nombre}
                                     </td>
 
@@ -163,27 +262,11 @@ function Usuarios() {
                                     </td>
 
                                     <td>
-                                        {
-                                            usuario.administrador
-                                                ? 'Sí'
-                                                : 'No'
-                                        }
+                                        {obtenerPermisos(usuario)}
                                     </td>
 
                                     <td>
-                                        {
-                                            usuario.editaEncuesta
-                                                ? 'Sí'
-                                                : 'No'
-                                        }
-                                    </td>
-
-                                    <td>
-                                        {
-                                            usuario.exportaExcel
-                                                ? 'Sí'
-                                                : 'No'
-                                        }
+                                        {obtenerAreas(usuario)}
                                     </td>
 
                                     <td>
@@ -198,14 +281,20 @@ function Usuarios() {
 
                                         <button
                                             className="boton-tabla editar"
-                                            onClick={() => abrirEditar(usuario)}
+                                            onClick={() =>
+                                                abrirEditar(usuario)
+                                            }
                                         >
                                             Editar
                                         </button>
 
                                         <button
                                             className="boton-tabla eliminar"
-                                            onClick={() => eliminarUsuario(usuario.idUsuario)}
+                                            onClick={() =>
+                                                eliminarUsuario(
+                                                    usuario.idUsuario
+                                                )
+                                            }
                                         >
                                             Eliminar
                                         </button>
