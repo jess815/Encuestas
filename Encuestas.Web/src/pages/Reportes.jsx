@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 
 function Reportes({
-    areasPermitidas,
     usuarioLogueado
 }) {
 
@@ -23,6 +22,69 @@ function Reportes({
     // revisa si el usuario es administrador
     const esAdministrador =
         usuarioLogueado?.administrador === true
+
+    // convierte el nombre del area en un texto facil de comparar
+    const crearSlug = (texto = '') => {
+
+        return String(texto)
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s/g, '')
+            .replace(/[^a-z0-9]/g, '')
+
+    }
+
+    // revisa si el usuario puede ver la respuesta
+    const puedeVerRespuesta = (respuesta) => {
+
+        if (esAdministrador) {
+
+            return true
+
+        }
+
+        const slugArea = crearSlug(respuesta.nombreArea)
+
+        if (slugArea === 'elceibo') {
+
+            return usuarioLogueado?.ceibo === true
+
+        }
+
+        if (slugArea === 'faroles') {
+
+            return usuarioLogueado?.faroles === true
+
+        }
+
+        if (slugArea === 'hoyo19') {
+
+            return usuarioLogueado?.hoyo19 === true
+
+        }
+
+        if (slugArea === 'pinrojo') {
+
+            return usuarioLogueado?.pinRojo === true
+
+        }
+
+        if (slugArea === 'canabrava') {
+
+            return usuarioLogueado?.canaBrava === true
+
+        }
+
+        if (slugArea === 'eventos') {
+
+            return usuarioLogueado?.eventos === true
+
+        }
+
+        return false
+
+    }
 
     // carga las encuestas respondidas
     const obtenerRespuestas = async () => {
@@ -59,7 +121,9 @@ function Reportes({
     const formatearFecha = (fecha) => {
 
         if (fecha === null || fecha === undefined) {
+
             return 'No indicada'
+
         }
 
         return new Date(fecha).toLocaleDateString()
@@ -79,7 +143,9 @@ function Reportes({
     const limpiarTexto = (valor) => {
 
         if (valor === null || valor === undefined) {
+
             return ''
+
         }
 
         return String(valor).replace(/"/g, '""')
@@ -149,19 +215,23 @@ function Reportes({
 
     }
 
-    // deja solo las respuestas de las areas permitidas
-    const respuestasPorArea = esAdministrador
-        ? respuestas
-        : respuestas.filter((respuesta) =>
-            areasPermitidas.includes(respuesta.idArea)
-        )
+    // deja solo las respuestas que puede ver el usuario
+    const respuestasPorArea = respuestas.filter((respuesta) =>
+        puedeVerRespuesta(respuesta)
+    )
 
     // obtiene las areas disponibles para el filtro
     const areasUnicas = [
         ...new Set(
-            respuestasPorArea.map((respuesta) =>
-                respuesta.nombreArea
-            )
+            respuestasPorArea
+                .map((respuesta) =>
+                    respuesta.nombreArea
+                )
+                .filter((area) =>
+                    area !== null &&
+                    area !== undefined &&
+                    area !== ''
+                )
         )
     ]
 
@@ -296,9 +366,21 @@ function Reportes({
 
                 <div className="tabla-header">
 
-                    <h2>
-                        Reporte de Encuestas Respondidas
-                    </h2>
+                    <div>
+
+                        <h2>
+                            Reporte de Encuestas Respondidas
+                        </h2>
+
+                        <p>
+                            {
+                                esAdministrador
+                                    ? 'Consulta las respuestas registradas en todas las áreas.'
+                                    : 'Consulta solo las respuestas de las áreas asignadas a su usuario.'
+                            }
+                        </p>
+
+                    </div>
 
                     <button
                         className="boton-agregar"
@@ -607,8 +689,8 @@ function Reportes({
 
                                     {
                                         respuestaDetalle.detalleRespuestas !== undefined &&
-                                        respuestaDetalle.detalleRespuestas !== null &&
-                                        respuestaDetalle.detalleRespuestas.length > 0 ?
+                                            respuestaDetalle.detalleRespuestas !== null &&
+                                            respuestaDetalle.detalleRespuestas.length > 0 ?
 
                                             <div className="detalle-preguntas">
 

@@ -2,9 +2,7 @@ import { useEffect, useState } from 'react'
 import Encuesta from './pages/Encuesta'
 import Areas from './pages/Areas'
 import Opciones from './pages/Opciones'
-import CorreosArea from './pages/CorreosArea'
 import Usuarios from './pages/Usuarios'
-import UsuarioAreas from './pages/UsuarioAreas'
 import Seguimientos from './pages/Seguimientos'
 import Reportes from './pages/Reportes'
 import Bitacora from './pages/Bitacora'
@@ -45,6 +43,112 @@ function App() {
 
   }, [])
 
+  // convierte el nombre del area en una ruta valida
+  const crearSlug = (texto = '') => {
+
+    return String(texto)
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s/g, '')
+      .replace(/[^a-z0-9]/g, '')
+
+  }
+
+  // revisa si el usuario puede ver el area
+  const puedeVerArea = (area, usuarioSistema) => {
+
+    if (usuarioSistema?.administrador === true) {
+
+      return true
+
+    }
+
+    const slug = crearSlug(area.nombre)
+
+    if (slug === 'elceibo') {
+
+      return usuarioSistema?.ceibo === true
+
+    }
+
+    if (slug === 'faroles') {
+
+      return usuarioSistema?.faroles === true
+
+    }
+
+    if (slug === 'hoyo19') {
+
+      return usuarioSistema?.hoyo19 === true
+
+    }
+
+    if (slug === 'pinrojo') {
+
+      return usuarioSistema?.pinRojo === true
+
+    }
+
+    if (slug === 'canabrava') {
+
+      return usuarioSistema?.canaBrava === true
+
+    }
+
+    if (slug === 'eventos') {
+
+      return usuarioSistema?.eventos === true
+
+    }
+
+    return false
+
+  }
+
+  // obtiene los ids de areas que puede ver el usuario
+  const obtenerIdsAreasPermitidas = (
+    usuarioSistema,
+    listaAreas
+  ) => {
+
+    return listaAreas
+      .filter((area) =>
+        puedeVerArea(area, usuarioSistema)
+      )
+      .map((area) =>
+        area.idArea
+      )
+
+  }
+
+  // obtiene el texto de areas visibles para el dashboard
+  const obtenerTextoAreasDashboard = () => {
+
+    if (usuarioLogueado?.administrador === true) {
+
+      return 'Todas las áreas del Costa Rica Country Club'
+
+    }
+
+    const areasUsuario = encuestas
+      .filter((area) =>
+        puedeVerArea(area, usuarioLogueado)
+      )
+      .map((area) =>
+        area.nombre
+      )
+
+    if (areasUsuario.length === 0) {
+
+      return 'Sin áreas asignadas'
+
+    }
+
+    return areasUsuario.join(', ')
+
+  }
+
   // carga las areas registradas
   const obtenerEncuestas = async () => {
 
@@ -58,10 +162,14 @@ function App() {
 
         setEncuestas(data)
 
+        return data
+
       }
       else if (response.status === 204) {
 
         setEncuestas([])
+
+        return []
 
       }
 
@@ -71,6 +179,8 @@ function App() {
       console.error(error)
 
     }
+
+    return []
 
   }
 
@@ -95,73 +205,6 @@ function App() {
     catch (error) {
 
       console.error(error)
-
-    }
-
-  }
-
-  // carga las areas que puede ver el usuario
-  const obtenerAreasUsuario = async (idUsuario, administrador) => {
-
-    try {
-
-      // el administrador puede ver todas las areas
-      if (administrador === true) {
-
-        const response = await fetch('/api/Encuesta')
-
-        if (response.ok) {
-
-          const data = await response.json()
-
-          const idsAreas = data.map((area) =>
-            area.idArea
-          )
-
-          setAreasPermitidas(idsAreas)
-
-        }
-        else {
-
-          setAreasPermitidas([])
-
-        }
-
-        return
-
-      }
-
-      const response = await fetch('/api/UsuarioArea')
-
-      if (response.ok) {
-
-        const data = await response.json()
-
-        // deja solo las areas asignadas al usuario
-        const relacionesUsuario = data.filter((relacion) =>
-          relacion.idUsuario === idUsuario &&
-          relacion.verArea === true
-        )
-
-        const idsAreas = relacionesUsuario.map((relacion) =>
-          relacion.idArea
-        )
-
-        setAreasPermitidas(idsAreas)
-
-      }
-      else if (response.status === 204) {
-
-        setAreasPermitidas([])
-
-      }
-
-    }
-    catch (error) {
-
-      console.error(error)
-
-      setAreasPermitidas([])
 
     }
 
@@ -193,13 +236,19 @@ function App() {
 
         const data = await response.json()
 
-        setUsuarioLogueado(data)
+        const areasActuales =
+          encuestas.length > 0
+            ? encuestas
+            : await obtenerEncuestas()
 
-        // carga las areas y el dashboard del usuario que ingreso
-        await obtenerAreasUsuario(
-          data.idUsuario,
-          data.administrador
-        )
+        const idsAreas =
+          obtenerIdsAreasPermitidas(
+            data,
+            areasActuales
+          )
+
+        setUsuarioLogueado(data)
+        setAreasPermitidas(idsAreas)
 
         await obtenerDashboard(
           data.idUsuario
@@ -266,31 +315,47 @@ function App() {
 
     // todos los usuarios pueden ver el dashboard
     if (moduloActual === 'dashboard') {
+
       return true
+
     }
 
-    // modulos relacionados con la administracion de encuestas
-    if (
-      moduloActual === 'encuestas' ||
-      moduloActual === 'opciones' ||
-      moduloActual === 'correosArea' ||
-      moduloActual === 'seguimientos'
-    ) {
+    // administracion de areas y preguntas
+    if (moduloActual === 'encuestas') {
+
       return puedeEditarEncuestas
+
+    }
+
+    // seguimientos de encuestas
+    if (moduloActual === 'seguimientos') {
+
+      return puedeEditarEncuestas
+
+    }
+
+    // opciones generales solo para administradores
+    if (moduloActual === 'opciones') {
+
+      return esAdministrador
+
     }
 
     // modulos exclusivos para administradores
     if (
       moduloActual === 'usuarios' ||
-      moduloActual === 'usuarioAreas' ||
       moduloActual === 'bitacora'
     ) {
+
       return esAdministrador
+
     }
 
     // modulo de reportes
     if (moduloActual === 'reportes') {
+
       return puedeVerReportes
+
     }
 
     return false
@@ -398,57 +463,77 @@ function App() {
                   modulo === 'dashboard' &&
                   tienePermisoModulo('dashboard') &&
 
-                  <div className="dashboard-resumen">
+                  <>
 
                     <div className="card-dashboard">
 
                       <h3>
-                        Encuestas recibidas
+                        {
+                          usuarioLogueado?.administrador
+                            ? 'Resumen general de encuestas'
+                            : 'Resumen de mis áreas'
+                        }
                       </h3>
 
                       <p>
-                        {dashboardDatos.cantidadEncuestas}
+                        {obtenerTextoAreasDashboard()}
                       </p>
 
                     </div>
 
-                    <div className="card-dashboard">
+                    <div className="dashboard-resumen">
 
-                      <h3>
-                        Promedio general
-                      </h3>
+                      <div className="card-dashboard">
 
-                      <p>
-                        {dashboardDatos.promedioGeneral}%
-                      </p>
+                        <h3>
+                          Encuestas recibidas
+                        </h3>
+
+                        <p>
+                          {dashboardDatos.cantidadEncuestas}
+                        </p>
+
+                      </div>
+
+                      <div className="card-dashboard">
+
+                        <h3>
+                          Promedio general
+                        </h3>
+
+                        <p>
+                          {dashboardDatos.promedioGeneral}%
+                        </p>
+
+                      </div>
+
+                      <div className="card-dashboard">
+
+                        <h3>
+                          Alertas generadas
+                        </h3>
+
+                        <p>
+                          {dashboardDatos.cantidadAlertas}
+                        </p>
+
+                      </div>
+
+                      <div className="card-dashboard">
+
+                        <h3>
+                          Comentarios registrados
+                        </h3>
+
+                        <p>
+                          {dashboardDatos.cantidadComentarios}
+                        </p>
+
+                      </div>
 
                     </div>
 
-                    <div className="card-dashboard">
-
-                      <h3>
-                        Alertas generadas
-                      </h3>
-
-                      <p>
-                        {dashboardDatos.cantidadAlertas}
-                      </p>
-
-                    </div>
-
-                    <div className="card-dashboard">
-
-                      <h3>
-                        Comentarios registrados
-                      </h3>
-
-                      <p>
-                        {dashboardDatos.cantidadComentarios}
-                      </p>
-
-                    </div>
-
-                  </div>
+                  </>
                 }
 
                 {
@@ -458,7 +543,6 @@ function App() {
                   <Areas
                     encuestas={encuestas}
                     obtenerEncuestas={obtenerEncuestas}
-                    areasPermitidas={areasPermitidas}
                     usuarioLogueado={usuarioLogueado}
                   />
                 }
@@ -471,28 +555,10 @@ function App() {
                 }
 
                 {
-                  modulo === 'correosArea' &&
-                  tienePermisoModulo('correosArea') &&
-
-                  <CorreosArea
-                    areas={encuestas}
-                    areasPermitidas={areasPermitidas}
-                    usuarioLogueado={usuarioLogueado}
-                  />
-                }
-
-                {
                   modulo === 'usuarios' &&
                   tienePermisoModulo('usuarios') &&
 
                   <Usuarios />
-                }
-
-                {
-                  modulo === 'usuarioAreas' &&
-                  tienePermisoModulo('usuarioAreas') &&
-
-                  <UsuarioAreas areas={encuestas} />
                 }
 
                 {
