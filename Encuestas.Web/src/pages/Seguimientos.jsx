@@ -3,7 +3,6 @@ import ModalNuevoSeguimiento from '../componentes/ModalNuevoSeguimiento'
 import ComentariosSeguimiento from './ComentariosSeguimiento'
 
 function Seguimientos({
-    areasPermitidas,
     usuarioLogueado
 }) {
 
@@ -24,6 +23,69 @@ function Seguimientos({
     // revisa si el usuario es administrador
     const esAdministrador =
         usuarioLogueado?.administrador === true
+
+    // convierte el nombre del area en un texto facil de comparar
+    const crearSlug = (texto = '') => {
+
+        return String(texto)
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s/g, '')
+            .replace(/[^a-z0-9]/g, '')
+
+    }
+
+    // revisa si el usuario puede ver la respuesta
+    const puedeVerRespuesta = (respuesta) => {
+
+        if (esAdministrador) {
+
+            return true
+
+        }
+
+        const slugArea = crearSlug(respuesta.nombreArea)
+
+        if (slugArea === 'elceibo') {
+
+            return usuarioLogueado?.ceibo === true
+
+        }
+
+        if (slugArea === 'faroles') {
+
+            return usuarioLogueado?.faroles === true
+
+        }
+
+        if (slugArea === 'hoyo19') {
+
+            return usuarioLogueado?.hoyo19 === true
+
+        }
+
+        if (slugArea === 'pinrojo') {
+
+            return usuarioLogueado?.pinRojo === true
+
+        }
+
+        if (slugArea === 'canabrava') {
+
+            return usuarioLogueado?.canaBrava === true
+
+        }
+
+        if (slugArea === 'eventos') {
+
+            return usuarioLogueado?.eventos === true
+
+        }
+
+        return false
+
+    }
 
     // carga los seguimientos desde el api
     const obtenerSeguimientos = async () => {
@@ -87,12 +149,10 @@ function Seguimientos({
 
     }
 
-    // deja solo las respuestas de las areas permitidas
-    const respuestasPermitidas = esAdministrador
-        ? respuestas
-        : respuestas.filter((respuesta) =>
-            areasPermitidas.includes(respuesta.idArea)
-        )
+    // deja solo las respuestas que puede ver el usuario
+    const respuestasPermitidas = respuestas.filter((respuesta) =>
+        puedeVerRespuesta(respuesta)
+    )
 
     // busca la encuesta relacionada al seguimiento
     const obtenerRespuestaSeguimiento = (idRespuesta) => {
@@ -158,7 +218,9 @@ function Seguimientos({
         )
 
         if (!confirmar) {
+
             return
+
         }
 
         try {
@@ -196,7 +258,9 @@ function Seguimientos({
     const formatearFecha = (fecha) => {
 
         if (fecha === null || fecha === undefined) {
+
             return 'Pendiente'
+
         }
 
         return new Date(fecha).toLocaleDateString()
@@ -229,9 +293,21 @@ function Seguimientos({
 
                 <div className="tabla-header">
 
-                    <h2>
-                        Seguimientos de Encuestas
-                    </h2>
+                    <div>
+
+                        <h2>
+                            Seguimientos de Encuestas
+                        </h2>
+
+                        <p>
+                            {
+                                esAdministrador
+                                    ? 'Administre los seguimientos de todas las áreas.'
+                                    : 'Administre solo los seguimientos de las áreas asignadas a su usuario.'
+                            }
+                        </p>
+
+                    </div>
 
                     <button
                         className="boton-agregar"
@@ -328,7 +404,7 @@ function Seguimientos({
                                                 <td>
                                                     {
                                                         respuesta &&
-                                                        respuesta.notaGeneral !== null
+                                                            respuesta.notaGeneral !== null
                                                             ? respuesta.notaGeneral
                                                             : 'N/A'
                                                     }
