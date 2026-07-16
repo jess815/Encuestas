@@ -18,7 +18,6 @@ function App() {
   const [cargando, setCargando] = useState(false)
   const [modulo, setModulo] = useState('dashboard')
   const [encuestas, setEncuestas] = useState([])
-  const [areasPermitidas, setAreasPermitidas] = useState([])
 
   const [dashboardDatos, setDashboardDatos] = useState({
     cantidadEncuestas: 0,
@@ -103,22 +102,6 @@ function App() {
     }
 
     return false
-
-  }
-
-  // obtiene los ids de areas que puede ver el usuario
-  const obtenerIdsAreasPermitidas = (
-    usuarioSistema,
-    listaAreas
-  ) => {
-
-    return listaAreas
-      .filter((area) =>
-        puedeVerArea(area, usuarioSistema)
-      )
-      .map((area) =>
-        area.idArea
-      )
 
   }
 
@@ -236,19 +219,9 @@ function App() {
 
         const data = await response.json()
 
-        const areasActuales =
-          encuestas.length > 0
-            ? encuestas
-            : await obtenerEncuestas()
-
-        const idsAreas =
-          obtenerIdsAreasPermitidas(
-            data,
-            areasActuales
-          )
-
         setUsuarioLogueado(data)
-        setAreasPermitidas(idsAreas)
+
+        await obtenerEncuestas()
 
         await obtenerDashboard(
           data.idUsuario
@@ -285,7 +258,6 @@ function App() {
 
     setLogueado(false)
     setUsuarioLogueado(null)
-    setAreasPermitidas([])
     setUsuario('')
     setPassword('')
     setModulo('dashboard')
@@ -566,7 +538,6 @@ function App() {
                   tienePermisoModulo('seguimientos') &&
 
                   <Seguimientos
-                    areasPermitidas={areasPermitidas}
                     usuarioLogueado={usuarioLogueado}
                   />
                 }
@@ -576,7 +547,6 @@ function App() {
                   tienePermisoModulo('reportes') &&
 
                   <Reportes
-                    areasPermitidas={areasPermitidas}
                     usuarioLogueado={usuarioLogueado}
                   />
                 }
