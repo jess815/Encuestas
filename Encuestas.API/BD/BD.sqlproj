@@ -62,14 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Usuarios.sql" />
-    <Build Include="dbo\Tables\UsuarioArea.sql" />
     <Build Include="dbo\Tables\Seguimientos.sql" />
     <Build Include="dbo\Tables\SeguimientoComentarios.sql" />
     <Build Include="dbo\Tables\Respuestas.sql" />
     <Build Include="dbo\Tables\RespuestaDetalle.sql" />
     <Build Include="dbo\Tables\Preguntas.sql" />
     <Build Include="dbo\Tables\Opciones.sql" />
-    <Build Include="dbo\Tables\CorreosArea.sql" />
     <Build Include="dbo\Tables\Bitacora.sql" />
     <Build Include="dbo\Tables\Areas.sql" />
   </ItemGroup>
