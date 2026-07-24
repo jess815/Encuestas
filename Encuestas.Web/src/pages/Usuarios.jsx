@@ -226,7 +226,7 @@ function Usuarios() {
                         className="boton-agregar"
                         onClick={abrirNuevo}
                     >
-                        Nuevo Usuario
+                        + Nuevo Usuario
                     </button>
 
                 </div>
