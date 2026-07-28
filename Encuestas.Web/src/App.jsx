@@ -20,12 +20,15 @@ function App() {
   const [modulo, setModulo] = useState('dashboard')
   const [encuestas, setEncuestas] = useState([])
 
-  const [dashboardDatos, setDashboardDatos] = useState({
+  // almacena la informacion del dashboard
+const [dashboardDatos, setDashboardDatos] = useState({
     cantidadEncuestas: 0,
     promedioGeneral: 0,
     cantidadAlertas: 0,
-    cantidadComentarios: 0
-  })
+    cantidadComentarios: 0,
+    encuestasPorMes: [],
+    ultimasAlertas: []
+})
 
   // obtiene la ruta actual para saber si es una encuesta
   const rutaActual = window.location.pathname.toLowerCase()
@@ -236,13 +239,15 @@ function App() {
     setPassword('')
     setModulo('dashboard')
 
-    setDashboardDatos({
-      cantidadEncuestas: 0,
-      promedioGeneral: 0,
-      cantidadAlertas: 0,
-      cantidadComentarios: 0
-    })
-
+    // limpia la informacion del dashboard
+setDashboardDatos({
+    cantidadEncuestas: 0,
+    promedioGeneral: 0,
+    cantidadAlertas: 0,
+    cantidadComentarios: 0,
+    encuestasPorMes: [],
+    ultimasAlertas: []
+})
   }
 
   // valida los permisos del usuario para cada modulo

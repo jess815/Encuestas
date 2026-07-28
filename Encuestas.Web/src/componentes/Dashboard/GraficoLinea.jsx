@@ -17,7 +17,9 @@ function GraficoLinea({
 
   return (
     <div className="card-dashboard">
-      <h3>Encuestas recibidas por mes</h3>
+      <h3>
+        Encuestas recibidas por mes
+      </h3>
 
       {
         datosGrafico.length === 0
@@ -27,7 +29,12 @@ function GraficoLinea({
             </p>
           )
           : (
-            <div style={{ width: '100%', height: 300 }}>
+            <div
+              style={{
+                width: '100%',
+                height: 300
+              }}
+            >
               <ResponsiveContainer>
                 <LineChart
                   data={datosGrafico}
@@ -50,11 +57,17 @@ function GraficoLinea({
                     allowDecimals={false}
                   />
 
-                  <Tooltip />
+                  <Tooltip
+                    formatter={(valor) => [
+                      valor,
+                      'Encuestas'
+                    ]}
+                  />
 
                   <Line
                     type="monotone"
                     dataKey="cantidad"
+                    name="Encuestas"
                     stroke="#1f4e79"
                     strokeWidth={3}
                     activeDot={{

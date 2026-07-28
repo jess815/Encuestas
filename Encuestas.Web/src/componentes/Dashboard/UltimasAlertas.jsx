@@ -5,9 +5,43 @@ function UltimasAlertas({
   const alertas =
     dashboardDatos?.ultimasAlertas ?? []
 
+  // convierte la fecha recibida en un formato legible
+  const formatearFecha = (fecha) => {
+    if (!fecha) {
+      return 'Sin fecha'
+    }
+
+    const fechaConvertida = new Date(fecha)
+
+    if (Number.isNaN(fechaConvertida.getTime())) {
+      return fecha
+    }
+
+    return fechaConvertida.toLocaleDateString(
+      'es-CR',
+      {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }
+    )
+  }
+
+  // redondea la nota para evitar decimales extensos
+  const formatearNota = (nota) => {
+    const valor = Number(nota)
+
+    if (Number.isNaN(valor)) {
+      return '0%'
+    }
+
+    return `${Math.round(valor)}%`
+  }
+
   return (
     <div className="card-dashboard">
-
       <h3>
         Últimas alertas
       </h3>
@@ -20,31 +54,51 @@ function UltimasAlertas({
             </p>
           )
           : (
-            <table className="tabla-dashboard">
-              <thead>
-                <tr>
-                  <th>Área</th>
-                  <th>Nota</th>
-                  <th>Fecha</th>
-                </tr>
-              </thead>
+            <div className="tabla-responsive">
+              <table className="tabla-dashboard">
+                <thead>
+                  <tr>
+                    <th>Área</th>
+                    <th>Nota</th>
+                    <th>Comentario</th>
+                    <th>Fecha</th>
+                  </tr>
+                </thead>
 
-              <tbody>
-                {
-                  alertas.map((alerta, index) => (
-                    <tr key={index}>
-                      <td>{alerta.area}</td>
-                      <td>{alerta.nota}</td>
-                      <td>{alerta.fecha}</td>
-                    </tr>
-                  ))
-                }
-              </tbody>
+                <tbody>
+                  {
+                    alertas.map((alerta, index) => (
+                      <tr
+                        key={
+                          `${alerta.area}-${alerta.fecha}-${index}`
+                        }
+                      >
+                        <td>
+                          {alerta.area}
+                        </td>
 
-            </table>
+                        <td>
+                          {formatearNota(alerta.nota)}
+                        </td>
+
+                        <td>
+                          {
+                            alerta.comentario ||
+                            'Sin comentario'
+                          }
+                        </td>
+
+                        <td>
+                          {formatearFecha(alerta.fecha)}
+                        </td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+            </div>
           )
       }
-
     </div>
   )
 }
