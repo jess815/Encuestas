@@ -1,20 +1,22 @@
+import TarjetasDashboard from '../componentes/Dashboard/TarjetasDashboard'
+import GraficoBarras from '../componentes/Dashboard/GraficoBarras'
+import GraficoDona from '../componentes/Dashboard/GraficoDona'
+import GraficoLinea from '../componentes/Dashboard/GraficoLinea'
+import UltimasAlertas from '../componentes/Dashboard/UltimasAlertas'
+
 function Dashboard({
   usuarioLogueado,
   encuestas,
   dashboardDatos,
   puedeVerArea
 }) {
-
   // obtiene el texto de las areas visibles
   const obtenerTextoAreas = () => {
-
     if (usuarioLogueado?.administrador === true) {
-
       return 'Todas las áreas del Costa Rica Country Club'
-
     }
 
-    const areasUsuario = encuestas
+    const areasUsuario = (encuestas ?? [])
       .filter((area) =>
         puedeVerArea(area, usuarioLogueado)
       )
@@ -23,20 +25,15 @@ function Dashboard({
       )
 
     if (areasUsuario.length === 0) {
-
       return 'Sin áreas asignadas'
-
     }
 
     return areasUsuario.join(', ')
-
   }
 
   return (
     <>
-
       <div className="card-dashboard">
-
         <h3>
           {
             usuarioLogueado?.administrador
@@ -48,60 +45,27 @@ function Dashboard({
         <p>
           {obtenerTextoAreas()}
         </p>
-
       </div>
 
-      <div className="dashboard-resumen">
+      <TarjetasDashboard
+        dashboardDatos={dashboardDatos}
+      />
 
-        <div className="card-dashboard">
+      <GraficoBarras
+        dashboardDatos={dashboardDatos}
+      />
 
-          <h3>
-            Encuestas recibidas
-          </h3>
+      <GraficoDona
+        dashboardDatos={dashboardDatos}
+      />
 
-          <p>
-            {dashboardDatos.cantidadEncuestas}
-          </p>
+      <GraficoLinea
+        dashboardDatos={dashboardDatos}
+      />
 
-        </div>
-
-        <div className="card-dashboard">
-
-          <h3>
-            Promedio general
-          </h3>
-
-          <p>
-            {dashboardDatos.promedioGeneral}%
-          </p>
-
-        </div>
-
-        <div className="card-dashboard">
-
-          <h3>
-            Alertas generadas
-          </h3>
-
-          <p>
-            {dashboardDatos.cantidadAlertas}
-          </p>
-
-        </div>
-
-        <div className="card-dashboard">
-
-          <h3>
-            Comentarios registrados
-          </h3>
-
-          <p>
-            {dashboardDatos.cantidadComentarios}
-          </p>
-
-        </div>
-
-      </div>
+      <UltimasAlertas
+        dashboardDatos={dashboardDatos}
+      />
 
     </>
   )
