@@ -1,6 +1,11 @@
 function TarjetasDashboard({
   dashboardDatos
 }) {
+  // redondea el promedio general
+  const promedioGeneral = Math.round(
+    Number(dashboardDatos?.promedioGeneral ?? 0)
+  )
+
   // muestra los indicadores principales
   return (
     <div className="dashboard-resumen">
@@ -15,7 +20,7 @@ function TarjetasDashboard({
       <div className="card-dashboard">
         <h3>Promedio general</h3>
         <p>
-          {dashboardDatos?.promedioGeneral ?? 0}%
+          {promedioGeneral}%
         </p>
       </div>
 

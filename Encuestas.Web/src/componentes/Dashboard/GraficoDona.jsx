@@ -9,9 +9,9 @@ import {
 function GraficoDona({
   dashboardDatos
 }) {
-  // obtiene el promedio general
-  const promedio = Number(
-    dashboardDatos?.promedioGeneral ?? 0
+  // obtiene y redondea el promedio general
+  const promedio = Math.round(
+    Number(dashboardDatos?.promedioGeneral ?? 0)
   )
 
   // prepara los datos del grafico
