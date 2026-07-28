@@ -8,6 +8,7 @@ import Reportes from './pages/Reportes'
 import Bitacora from './pages/Bitacora'
 import Sidebar from './componentes/Sidebar'
 import Navbar from './componentes/Navbar'
+import Dashboard from './pages/Dashboard'
 
 function App() {
 
@@ -102,33 +103,6 @@ function App() {
     }
 
     return false
-
-  }
-
-  // obtiene el texto de areas visibles para el dashboard
-  const obtenerTextoAreasDashboard = () => {
-
-    if (usuarioLogueado?.administrador === true) {
-
-      return 'Todas las áreas del Costa Rica Country Club'
-
-    }
-
-    const areasUsuario = encuestas
-      .filter((area) =>
-        puedeVerArea(area, usuarioLogueado)
-      )
-      .map((area) =>
-        area.nombre
-      )
-
-    if (areasUsuario.length === 0) {
-
-      return 'Sin áreas asignadas'
-
-    }
-
-    return areasUsuario.join(', ')
 
   }
 
@@ -435,77 +409,12 @@ function App() {
                   modulo === 'dashboard' &&
                   tienePermisoModulo('dashboard') &&
 
-                  <>
-
-                    <div className="card-dashboard">
-
-                      <h3>
-                        {
-                          usuarioLogueado?.administrador
-                            ? 'Resumen general de encuestas'
-                            : 'Resumen de mis áreas'
-                        }
-                      </h3>
-
-                      <p>
-                        {obtenerTextoAreasDashboard()}
-                      </p>
-
-                    </div>
-
-                    <div className="dashboard-resumen">
-
-                      <div className="card-dashboard">
-
-                        <h3>
-                          Encuestas recibidas
-                        </h3>
-
-                        <p>
-                          {dashboardDatos.cantidadEncuestas}
-                        </p>
-
-                      </div>
-
-                      <div className="card-dashboard">
-
-                        <h3>
-                          Promedio general
-                        </h3>
-
-                        <p>
-                          {dashboardDatos.promedioGeneral}%
-                        </p>
-
-                      </div>
-
-                      <div className="card-dashboard">
-
-                        <h3>
-                          Alertas generadas
-                        </h3>
-
-                        <p>
-                          {dashboardDatos.cantidadAlertas}
-                        </p>
-
-                      </div>
-
-                      <div className="card-dashboard">
-
-                        <h3>
-                          Comentarios registrados
-                        </h3>
-
-                        <p>
-                          {dashboardDatos.cantidadComentarios}
-                        </p>
-
-                      </div>
-
-                    </div>
-
-                  </>
+                  <Dashboard
+                    usuarioLogueado={usuarioLogueado}
+                    encuestas={encuestas}
+                    dashboardDatos={dashboardDatos}
+                    puedeVerArea={puedeVerArea}
+                  />
                 }
 
                 {
