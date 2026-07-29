@@ -8,26 +8,44 @@ function ModalNuevoComentarioSeguimiento({
     usuarioLogueado
 }) {
 
-    // Valida si se está creando o editando
-    const esEdicion = comentarioEditar !== null && comentarioEditar !== undefined
+    // valida si se esta creando o editando
+    const esEdicion =
+        comentarioEditar !== null &&
+        comentarioEditar !== undefined
 
     // obtiene el usuario que inicio sesion
-    const idUsuario = usuarioLogueado?.idUsuario
+    const idUsuario =
+        usuarioLogueado?.idUsuario
 
-    // Estados del formulario
-    const [comentario, setComentario] = useState(esEdicion ? comentarioEditar.comentario : '')
+    // almacena el comentario del formulario
+    const [comentario, setComentario] = useState(
+        esEdicion
+            ? comentarioEditar.comentario
+            : ''
+    )
 
-    // Guarda o edita el comentario
+    // guarda o edita un comentario
     const guardar = async () => {
 
+        // valida que exista un usuario autenticado
+        if (!idUsuario) {
+
+            alert('No se identifico el usuario actual')
+            return
+
+        }
+
+        // valida que el comentario tenga contenido
         if (comentario.trim() === '') {
+
             alert('El comentario es requerido')
             return
+
         }
 
         try {
 
-            // Define si usa POST o PUT
+            // define si utiliza post o put
             const url = esEdicion
                 ? `/api/SeguimientoComentario/${comentarioEditar.idSeguimientoComentario}`
                 : '/api/SeguimientoComentario'
@@ -44,20 +62,28 @@ function ModalNuevoComentarioSeguimiento({
                     'Content-Type': 'application/json'
                 },
 
-                // Datos que se envían al API
+                // envia la informacion al api
                 body: JSON.stringify({
-                    idSeguimiento: seguimiento.idSeguimiento,
-                    idUsuario: idUsuario,
-                    comentario: comentario
+
+                    idSeguimiento:
+                        seguimiento.idSeguimiento,
+
+                    idUsuario:
+                        idUsuario,
+
+                    comentario:
+                        comentario
+
                 })
 
             })
 
             if (response.ok) {
 
-                // Recarga la tabla y cierra el modal
+                // actualiza la lista de comentarios
                 await obtenerComentarios()
 
+                // cierra el modal
                 onCerrar()
 
             }
@@ -85,22 +111,33 @@ function ModalNuevoComentarioSeguimiento({
             <div className="modal">
 
                 <h2>
+
                     {
                         esEdicion
-                            ? 'Editar Comentario'
-                            : 'Nuevo Comentario'
+                            ? 'Editar comentario'
+                            : 'Nuevo comentario'
                     }
+
                 </h2>
 
                 <label>
+
                     Comentario
+
                 </label>
 
                 <textarea
-                    placeholder="Escriba el comentario del seguimiento"
+
                     className="input"
+
+                    placeholder="Escriba el comentario del seguimiento"
+
                     value={comentario}
-                    onChange={(e) => setComentario(e.target.value)}
+
+                    onChange={(e) =>
+                        setComentario(e.target.value)
+                    }
+
                 />
 
                 <div className="modal-botones">
@@ -109,18 +146,22 @@ function ModalNuevoComentarioSeguimiento({
                         className="boton"
                         onClick={guardar}
                     >
+
                         {
                             esEdicion
                                 ? 'Guardar cambios'
                                 : 'Guardar'
                         }
+
                     </button>
 
                     <button
                         className="boton"
                         onClick={onCerrar}
                     >
+
                         Cancelar
+
                     </button>
 
                 </div>
@@ -130,6 +171,7 @@ function ModalNuevoComentarioSeguimiento({
         </div>
 
     )
+
 }
 
 export default ModalNuevoComentarioSeguimiento
