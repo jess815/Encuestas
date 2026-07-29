@@ -81,14 +81,23 @@ textarea.input{
 /* Layout principal */
 
 .dashboard{
-  min-height: 100vh;
+  height: 100vh;
   background-color: #f4f4f4;
+  overflow: hidden;
 }
 
 .navbar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 76px;
+  z-index: 1000;
+
   background-color: var(--verde-crcc);
   color: white;
   padding: 18px 24px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -152,11 +161,16 @@ textarea.input{
 
 .dashboard-layout{
   display: flex;
+  margin-top: 76px;
 }
 
 .sidebar{
+  position: fixed;
+  top: 76px;
+  left: 0;
+  bottom: 0;
   width: 250px;
-  min-height: calc(100vh - 76px);
+  overflow-y: auto;
   background-color: white;
   padding: 20px;
   box-shadow: 2px 0px 10px rgba(0,0,0,0.05);
@@ -180,8 +194,13 @@ textarea.input{
 }
 
 .contenido-dashboard{
+  width: calc(100% - 250px);
+  margin-left: 250px;
+  height: calc(100vh - 76px);
+
   padding: 30px;
-  width: 100%;
+
+  overflow-y: auto;
   overflow-x: auto;
 }
 
