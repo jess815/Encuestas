@@ -275,6 +275,7 @@ function Seguimientos({
             <ComentariosSeguimiento
                 seguimiento={seguimientoSeleccionado}
                 respuesta={respuestaSeleccionada}
+                usuarioLogueado={usuarioLogueado}
                 onVolver={() => {
                     setSeguimientoSeleccionado(null)
                     setRespuestaSeleccionada(null)
@@ -442,16 +443,20 @@ function Seguimientos({
                                                         Editar
                                                     </button>
 
-                                                    <button
-                                                        className="boton-tabla eliminar"
-                                                        onClick={() =>
-                                                            eliminarSeguimiento(
-                                                                seguimiento.idSeguimiento
-                                                            )
-                                                        }
-                                                    >
-                                                        Eliminar
-                                                    </button>
+                                                    {
+                                                        esAdministrador &&
+
+                                                        <button
+                                                            className="boton-tabla eliminar"
+                                                            onClick={() =>
+                                                                eliminarSeguimiento(
+                                                                    seguimiento.idSeguimiento
+                                                                )
+                                                            }
+                                                        >
+                                                            Eliminar
+                                                        </button>
+                                                    }
 
                                                 </td>
 

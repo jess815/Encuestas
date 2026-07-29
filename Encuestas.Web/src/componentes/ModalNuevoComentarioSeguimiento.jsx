@@ -1,12 +1,18 @@
 import { useState } from 'react'
 
-function ModalNuevoComentarioSeguimiento({ onCerrar, obtenerComentarios, seguimiento, comentarioEditar }) {
+function ModalNuevoComentarioSeguimiento({
+    onCerrar,
+    obtenerComentarios,
+    seguimiento,
+    comentarioEditar,
+    usuarioLogueado
+}) {
 
     // Valida si se está creando o editando
     const esEdicion = comentarioEditar !== null && comentarioEditar !== undefined
 
-    // Usuario temporal mientras conectamos el usuario logueado
-    const idUsuario = 1
+    // obtiene el usuario que inicio sesion
+    const idUsuario = usuarioLogueado?.idUsuario
 
     // Estados del formulario
     const [comentario, setComentario] = useState(esEdicion ? comentarioEditar.comentario : '')
