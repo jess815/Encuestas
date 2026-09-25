@@ -192,14 +192,19 @@ function Areas({
 
     }
 
-    // muestra las preguntas del area seleccionada
-    if (areaSeleccionada !== null) {
+    // muestra las preguntas solamente cuando el usuario es administrador
+    if (
+        areaSeleccionada !== null &&
+        esAdministrador
+    ) {
 
         return (
 
             <PreguntasArea
                 area={areaSeleccionada}
-                onVolver={() => setAreaSeleccionada(null)}
+                onVolver={() =>
+                    setAreaSeleccionada(null)
+                }
             />
 
         )
@@ -220,7 +225,7 @@ function Areas({
                             {
                                 esAdministrador
                                     ? 'Administración de Áreas'
-                                    : 'Encuestas de mis Áreas'
+                                    : 'Encuestas'
                             }
                         </h2>
 
@@ -228,7 +233,7 @@ function Areas({
                             {
                                 esAdministrador
                                     ? 'Configure las áreas, correos y preguntas de las encuestas.'
-                                    : 'Estas son las áreas asignadas a su usuario.'
+                                    : 'Consulte y comparta las encuestas de las áreas asignadas a su usuario.'
                             }
                         </p>
 
@@ -269,6 +274,7 @@ function Areas({
                             <thead>
 
                                 <tr>
+
                                     <th>Área</th>
                                     <th>Tipo</th>
 
@@ -283,6 +289,7 @@ function Areas({
 
                                     <th>Estado</th>
                                     <th>Acciones</th>
+
                                 </tr>
 
                             </thead>
@@ -306,6 +313,7 @@ function Areas({
                                                 esAdministrador &&
 
                                                 <>
+
                                                     <td>
                                                         {
                                                             area.correoGeneral ||
@@ -319,7 +327,9 @@ function Areas({
                                                             'Sin configurar'
                                                         }
                                                     </td>
+
                                                 </>
+
                                             }
 
                                             <td>
@@ -350,19 +360,19 @@ function Areas({
                                                     Copiar enlace
                                                 </button>
 
-                                                <button
-                                                    className="boton-tabla editar"
-                                                    onClick={() =>
-                                                        setAreaSeleccionada(area)
-                                                    }
-                                                >
-                                                    Ver preguntas
-                                                </button>
-
                                                 {
                                                     esAdministrador &&
 
                                                     <>
+
+                                                        <button
+                                                            className="boton-tabla editar"
+                                                            onClick={() =>
+                                                                setAreaSeleccionada(area)
+                                                            }
+                                                        >
+                                                            Ver preguntas
+                                                        </button>
 
                                                         <button
                                                             className="boton-tabla editar"
@@ -385,6 +395,7 @@ function Areas({
                                                         </button>
 
                                                     </>
+
                                                 }
 
                                             </td>
@@ -402,7 +413,8 @@ function Areas({
             </div>
 
             {
-                mostrarModal && esAdministrador &&
+                mostrarModal &&
+                esAdministrador &&
 
                 <ModalNuevaArea
                     onCerrar={cerrarModal}
@@ -414,6 +426,7 @@ function Areas({
         </>
 
     )
+
 }
 
 export default Areas

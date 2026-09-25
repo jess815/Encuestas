@@ -4,10 +4,24 @@ function Sidebar({ setModulo, usuarioLogueado }) {
     const esAdministrador =
         usuarioLogueado?.administrador === true
 
-    // permite administrar las encuestas
-    const puedeEditarEncuestas =
+    // revisa si el usuario tiene alguna area asignada
+    const tieneAreasAsignadas =
+        usuarioLogueado?.ceibo === true ||
+        usuarioLogueado?.faroles === true ||
+        usuarioLogueado?.hoyo19 === true ||
+        usuarioLogueado?.pinRojo === true ||
+        usuarioLogueado?.canaBrava === true ||
+        usuarioLogueado?.eventos === true
+
+    // permite ingresar a las encuestas asignadas
+    const puedeVerEncuestas =
         esAdministrador ||
-        usuarioLogueado?.editaEncuesta === true
+        tieneAreasAsignadas
+
+    // permite ingresar a los seguimientos
+    const puedeVerSeguimientos =
+        esAdministrador ||
+        tieneAreasAsignadas
 
     // permite ingresar a los reportes
     const puedeVerReportes =
@@ -26,18 +40,22 @@ function Sidebar({ setModulo, usuarioLogueado }) {
             </button>
 
             {
-                puedeEditarEncuestas &&
+                puedeVerEncuestas &&
 
                 <button
                     className="menu-boton"
                     onClick={() => setModulo('encuestas')}
                 >
-                    Administración
+                    {
+                        esAdministrador
+                            ? 'Administración'
+                            : 'Encuestas'
+                    }
                 </button>
             }
 
             {
-                puedeEditarEncuestas &&
+                puedeVerSeguimientos &&
 
                 <button
                     className="menu-boton"
@@ -92,6 +110,7 @@ function Sidebar({ setModulo, usuarioLogueado }) {
         </div>
 
     )
+
 }
 
 export default Sidebar
