@@ -108,13 +108,13 @@ function PreguntasArea({ area, onVolver }) {
 
             <div className="tabla-contenedor">
 
-                <div className="tabla-header">
+                <div className="tabla-header preguntas-header">
 
                     <h2>
                         Preguntas de {area.nombre}
                     </h2>
 
-                    <div>
+                    <div className="preguntas-acciones">
 
                         <button
                             className="boton-agregar"
@@ -134,13 +134,13 @@ function PreguntasArea({ area, onVolver }) {
 
                 </div>
 
-                <table className="tabla">
+                <table className="tabla tabla-preguntas">
 
                     <thead>
 
                         <tr>
                             <th>ID</th>
-                            <th>Pregunta</th>
+                            <th className="pregunta-columna-texto">Pregunta</th>
                             <th>Orden</th>
                             <th>Estado</th>
                             <th>Acciones</th>
@@ -159,7 +159,7 @@ function PreguntasArea({ area, onVolver }) {
                                         {pregunta.idPregunta}
                                     </td>
 
-                                    <td>
+                                    <td className="pregunta-columna-texto">
                                         {pregunta.texto}
                                     </td>
 

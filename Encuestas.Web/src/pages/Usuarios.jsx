@@ -231,7 +231,7 @@ function Usuarios() {
 
                 </div>
 
-                <table className="tabla">
+                <table className="tabla tabla-usuarios">
 
                     <thead>
 

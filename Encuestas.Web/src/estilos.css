@@ -1317,3 +1317,59 @@ textarea.input{
 
 }
 
+/* ajustes responsive de preguntas por area */
+
+.preguntas-acciones{
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tabla-preguntas .pregunta-columna-texto{
+  min-width: 280px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px){
+
+  .preguntas-header{
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .preguntas-header h2{
+    font-size: 21px;
+    line-height: 1.35;
+  }
+
+  .preguntas-acciones{
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .preguntas-acciones .boton-agregar{
+    width: 100%;
+  }
+
+}
+
+/* ajustes responsive de usuarios */
+
+.tabla-usuarios th:nth-child(3),
+.tabla-usuarios td:nth-child(3),
+.tabla-usuarios th:nth-child(4),
+.tabla-usuarios td:nth-child(4){
+  white-space: normal;
+  min-width: 190px;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px){
+
+  .tabla-usuarios{
+    min-width: 760px;
+  }
+
+}
