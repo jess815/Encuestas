@@ -9,6 +9,7 @@ import {
 function GraficoDona({
   dashboardDatos
 }) {
+
   // obtiene y redondea el promedio general
   const promedio = Math.round(
     Number(dashboardDatos?.promedioGeneral ?? 0)
@@ -27,12 +28,24 @@ function GraficoDona({
   ]
 
   return (
-    <div className="card-dashboard">
-      <h3>Promedio general</h3>
 
-      <div style={{ width: '100%', height: 300 }}>
+    <div className="card-dashboard">
+
+      <h3>
+        Promedio general
+      </h3>
+
+      <div
+        style={{
+          width: '100%',
+          height: 300
+        }}
+      >
+
         <ResponsiveContainer>
+
           <PieChart>
+
             <Pie
               data={datosGrafico}
               dataKey="valor"
@@ -43,22 +56,37 @@ function GraficoDona({
               outerRadius={100}
               paddingAngle={3}
             >
-              <Cell fill="#1f4e79" />
-              <Cell fill="#d9e2f3" />
+
+              <Cell fill="#006361" />
+              <Cell fill="#e4e4e4" />
+
             </Pie>
 
             <Tooltip
               formatter={(valor) => `${valor}%`}
             />
+
           </PieChart>
+
         </ResponsiveContainer>
+
       </div>
 
-      <p style={{ textAlign: 'center' }}>
+      <p
+        style={{
+          textAlign: 'center',
+          color: '#006361',
+          fontWeight: 'bold',
+          fontSize: '20px'
+        }}
+      >
         {promedio}%
       </p>
+
     </div>
+
   )
+
 }
 
 export default GraficoDona

@@ -256,10 +256,26 @@ setDashboardDatos({
     const esAdministrador =
       usuarioLogueado?.administrador === true
 
-    const puedeEditarEncuestas =
-      esAdministrador ||
-      usuarioLogueado?.editaEncuesta === true
+    // revisa si el usuario tiene alguna area asignada
+    const tieneAreasAsignadas =
+      usuarioLogueado?.ceibo === true ||
+      usuarioLogueado?.faroles === true ||
+      usuarioLogueado?.hoyo19 === true ||
+      usuarioLogueado?.pinRojo === true ||
+      usuarioLogueado?.canaBrava === true ||
+      usuarioLogueado?.eventos === true
 
+    // permite ingresar a las encuestas asignadas
+    const puedeVerEncuestas =
+      esAdministrador ||
+      tieneAreasAsignadas
+
+    // permite ingresar a los seguimientos
+    const puedeVerSeguimientos =
+      esAdministrador ||
+      tieneAreasAsignadas
+
+    // permite ingresar a los reportes
     const puedeVerReportes =
       esAdministrador ||
       usuarioLogueado?.exportaExcel === true
@@ -271,17 +287,17 @@ setDashboardDatos({
 
     }
 
-    // administracion de areas y preguntas
+    // encuestas disponibles segun las areas asignadas
     if (moduloActual === 'encuestas') {
 
-      return puedeEditarEncuestas
+      return puedeVerEncuestas
 
     }
 
-    // seguimientos de encuestas
+    // seguimientos disponibles segun las areas asignadas
     if (moduloActual === 'seguimientos') {
 
-      return puedeEditarEncuestas
+      return puedeVerSeguimientos
 
     }
 

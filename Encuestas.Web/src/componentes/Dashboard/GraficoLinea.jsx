@@ -11,12 +11,15 @@ import {
 function GraficoLinea({
   dashboardDatos
 }) {
+
   // obtiene las encuestas agrupadas por mes
   const datosGrafico =
     dashboardDatos?.encuestasPorMes ?? []
 
   return (
+
     <div className="card-dashboard">
+
       <h3>
         Encuestas recibidas por mes
       </h3>
@@ -24,18 +27,23 @@ function GraficoLinea({
       {
         datosGrafico.length === 0
           ? (
+
             <p>
               No hay información mensual disponible.
             </p>
+
           )
           : (
+
             <div
               style={{
                 width: '100%',
                 height: 300
               }}
             >
+
               <ResponsiveContainer>
+
                 <LineChart
                   data={datosGrafico}
                   margin={{
@@ -45,6 +53,7 @@ function GraficoLinea({
                     bottom: 10
                   }}
                 >
+
                   <CartesianGrid
                     strokeDasharray="3 3"
                   />
@@ -68,19 +77,26 @@ function GraficoLinea({
                     type="monotone"
                     dataKey="cantidad"
                     name="Encuestas"
-                    stroke="#1f4e79"
+                    stroke="#006361"
                     strokeWidth={3}
                     activeDot={{
                       r: 6
                     }}
                   />
+
                 </LineChart>
+
               </ResponsiveContainer>
+
             </div>
+
           )
       }
+
     </div>
+
   )
+
 }
 
 export default GraficoLinea

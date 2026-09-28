@@ -10,8 +10,10 @@ function Dashboard({
   dashboardDatos,
   puedeVerArea
 }) {
+
   // obtiene el texto de las areas visibles
   const obtenerTextoAreas = () => {
+
     if (usuarioLogueado?.administrador === true) {
       return 'Todas las áreas del Costa Rica Country Club'
     }
@@ -29,10 +31,13 @@ function Dashboard({
     }
 
     return areasUsuario.join(', ')
+
   }
 
   return (
-    <>
+
+    <div className="dashboard-contenido">
+
       <div className="card-dashboard">
         <h3>
           {
@@ -51,24 +56,30 @@ function Dashboard({
         dashboardDatos={dashboardDatos}
       />
 
-      <GraficoBarras
-        dashboardDatos={dashboardDatos}
-      />
+      <div className="dashboard-graficos">
 
-      <GraficoDona
-        dashboardDatos={dashboardDatos}
-      />
+        <GraficoBarras
+          dashboardDatos={dashboardDatos}
+        />
 
-      <GraficoLinea
-        dashboardDatos={dashboardDatos}
-      />
+        <GraficoDona
+          dashboardDatos={dashboardDatos}
+        />
+
+        <GraficoLinea
+          dashboardDatos={dashboardDatos}
+        />
+
+      </div>
 
       <UltimasAlertas
         dashboardDatos={dashboardDatos}
       />
 
-    </>
+    </div>
+
   )
+
 }
 
 export default Dashboard
