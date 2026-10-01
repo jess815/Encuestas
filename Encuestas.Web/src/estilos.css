@@ -18,7 +18,7 @@ body{
   color: var(--negro-crcc);
 }
 
-/* Login */
+/* login */
 
 .contenedor{
   min-height: 100vh;
@@ -32,6 +32,7 @@ body{
   padding: 40px;
   border-radius: 16px;
   width: 450px;
+  max-width: calc(100% - 24px);
   box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
   text-align: center;
 }
@@ -78,7 +79,7 @@ textarea.input{
   background-color: #004c4a;
 }
 
-/* Layout principal */
+/* layout principal */
 
 .dashboard{
   height: 100vh;
@@ -102,7 +103,7 @@ textarea.input{
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .navbar-titulo h2{
@@ -201,10 +202,10 @@ textarea.input{
   padding: 30px;
 
   overflow-y: auto;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 
-/* Dashboard */
+/* dashboard */
 
 .dashboard-resumen{
   display: grid;
@@ -231,7 +232,7 @@ textarea.input{
   color: var(--verde-crcc);
 }
 
-/* Tablas */
+/* tablas */
 
 .tabla-contenedor{
   width: 100%;
@@ -297,7 +298,7 @@ textarea.input{
   background-color: #c0392b;
 }
 
-/* Modales */
+/* modales */
 
 .modal-overlay{
   position: fixed;
@@ -344,61 +345,7 @@ textarea.input{
   margin-top: 10px;
 }
 
-/* Encuesta */
-
-.pregunta-card{
-  background-color: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-left: 5px solid var(--verde-crcc);
-  border-radius: 14px;
-  padding: 20px;
-  margin-top: 18px;
-  box-shadow: 0px 3px 8px rgba(0,0,0,0.06);
-}
-
-.pregunta-card h3{
-  color: var(--negro-crcc);
-  font-size: 18px;
-  margin-bottom: 16px;
-}
-
-.opciones-encuesta{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
-}
-
-.opcion-encuesta{
-  border: 1px solid #d7d7d7;
-  border-radius: 12px;
-  padding: 12px 14px;
-  cursor: pointer;
-  background-color: #fafafa;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: 0.2s;
-  font-weight: 500;
-}
-
-.opcion-encuesta:hover{
-  border-color: var(--verde-crcc);
-  background-color: #f0f7f6;
-}
-
-.opcion-encuesta input{
-  accent-color: var(--verde-crcc);
-  cursor: pointer;
-}
-
-.opcion-encuesta:has(input:checked){
-  border-color: var(--verde-crcc);
-  background-color: #e7f3f2;
-  color: var(--verde-crcc);
-  font-weight: bold;
-}
-
-/* Encuesta pública */
+/* encuesta publica */
 
 .encuesta-publica{
   min-height: 100vh;
@@ -457,6 +404,7 @@ textarea.input{
   border-radius: 14px;
   padding: 20px;
   margin-top: 18px;
+  box-shadow: 0px 3px 8px rgba(0,0,0,0.06);
 }
 
 .numero-pregunta{
@@ -529,7 +477,7 @@ textarea.input{
   margin-bottom: 22px;
 }
 
-/* Ajustes responsive para encuesta */
+/* ajustes responsive para encuesta */
 
 @media (max-width: 700px){
 
@@ -594,7 +542,7 @@ textarea.input{
 
 }
 
-/* Validación visual de preguntas */
+/* validacion visual de preguntas */
 
 .pregunta-faltante{
   border-color: #c62828;
@@ -609,39 +557,7 @@ textarea.input{
   margin: -6px 0 14px 0;
 }
 
-/* Aviso de preguntas pendientes */
-
-.aviso-encuesta-incompleta{
-  border: 1px solid #d0d0d0;
-  border-left: 5px solid #777777;
-  background-color: #fbfbfb;
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin: 14px 0 18px 0;
-}
-
-.aviso-encuesta-incompleta strong{
-  color: #333333;
-}
-
-.aviso-encuesta-incompleta p{
-  color: #555555;
-  margin: 6px 0 0 0;
-}
-
-.pregunta-pendiente{
-  border-left-color: #777777;
-  background-color: #fcfcfc;
-}
-
-.mensaje-pregunta-pendiente{
-  color: #d11010;
-  font-size: 14px;
-  font-weight: 600;
-  margin: -6px 0 14px 0;
-}
-
-/* Aviso de preguntas pendientes */
+/* aviso de preguntas pendientes */
 
 .aviso-encuesta-incompleta{
   border: 1px solid #d0d0d0;
@@ -673,7 +589,7 @@ textarea.input{
   margin: -6px 0 14px 0;
 }
 
-/* Confirmación de encuesta */
+/* confirmacion de encuesta */
 
 .encuesta-confirmacion{
   max-width: 560px;
@@ -735,7 +651,7 @@ textarea.input{
 
 }
 
-/* Avance de encuesta */
+/* avance de encuesta */
 
 .encuesta-titulo-progreso{
   display: flex;
@@ -782,7 +698,7 @@ textarea.input{
 
 }
 
-/* Botón para quitar respuesta */
+/* boton para quitar respuesta */
 
 .boton-quitar-respuesta{
   margin-top: 14px;
@@ -800,7 +716,7 @@ textarea.input{
   text-decoration: underline;
 }
 
-/* Detalle de reportes */
+/* detalle de reportes */
 
 .modal-detalle-reporte{
   max-width: 820px;
@@ -857,7 +773,7 @@ textarea.input{
 
 }
 
-/* Seguimiento de encuesta */
+/* seguimiento de encuesta */
 
 .informacion-seguimiento{
   margin-bottom: 24px;
@@ -914,7 +830,7 @@ textarea.input{
 
 }
 
-/* Tabla de ultimas alertas del dashboard */
+/* tabla de ultimas alertas del dashboard */
 
 .ultimas-alertas{
   margin-top: 24px;
@@ -922,7 +838,7 @@ textarea.input{
 
 .tabla-responsive{
   width: 100%;
-  overflow-x: auto;
+  overflow-x: hidden;
   margin-top: 16px;
 }
 
@@ -976,17 +892,7 @@ textarea.input{
   white-space: normal;
 }
 
-/* ajuste para pantallas pequenas */
-
-@media (max-width: 900px){
-
-  .tabla-dashboard{
-    min-width: 700px;
-  }
-
-}
-
-/* Distribucion del contenido del dashboard */
+/* distribucion del contenido del dashboard */
 
 .dashboard-contenido{
   display: flex;
@@ -1030,11 +936,7 @@ textarea.input{
 
 }
 
-/* Ajustes responsive del navbar */
-
-.navbar{
-  gap: 20px;
-}
+/* ajustes responsive del navbar */
 
 .navbar-titulo{
   min-width: 0;
@@ -1123,7 +1025,7 @@ textarea.input{
 
 }
 
-/* Ajustes responsive del sidebar y contenido */
+/* ajustes responsive del sidebar y contenido */
 
 /* ajuste para tablets */
 
@@ -1191,28 +1093,29 @@ textarea.input{
 
 }
 
-/* Ajustes responsive de tablas */
+/* ajustes responsive de tablas */
 
 @media (max-width: 900px){
 
   .tabla-contenedor{
     width: 100%;
     padding: 20px;
-    overflow-x: auto;
+    overflow-x: hidden;
   }
 
   .tabla{
-    min-width: 750px;
+    width: 100%;
+    min-width: 0;
   }
 
   .tabla th,
   .tabla td{
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .tabla td:last-child{
-    white-space: normal;
-    min-width: 190px;
+    min-width: 0;
   }
 
   .boton-tabla{
@@ -1221,7 +1124,7 @@ textarea.input{
 
 }
 
-/* Ajustes de tablas para celulares */
+/* ajustes de tablas para celulares */
 
 @media (max-width: 600px){
 
@@ -1245,7 +1148,7 @@ textarea.input{
   }
 
   .tabla{
-    min-width: 700px;
+    min-width: 0;
   }
 
   .boton-agregar{
@@ -1353,23 +1256,81 @@ textarea.input{
     width: 100%;
   }
 
-}
+  .tabla-preguntas{
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
 
-/* ajustes responsive de usuarios */
+  .tabla-preguntas thead{
+    display: none;
+  }
 
-.tabla-usuarios th:nth-child(3),
-.tabla-usuarios td:nth-child(3),
-.tabla-usuarios th:nth-child(4),
-.tabla-usuarios td:nth-child(4){
-  white-space: normal;
-  min-width: 190px;
-  overflow-wrap: anywhere;
-}
+  .tabla-preguntas tbody{
+    display: block;
+    width: 100%;
+  }
 
-@media (max-width: 600px){
+  .tabla-preguntas tr{
+    display: block;
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 14px;
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+    background-color: white;
+  }
 
-  .tabla-usuarios{
-    min-width: 760px;
+  .tabla-preguntas tr:last-child{
+    margin-bottom: 0;
+  }
+
+  .tabla-preguntas td,
+  .tabla-preguntas .pregunta-columna-texto{
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1fr);
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+    padding: 10px 0;
+    border-bottom: 1px solid #eeeeee;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .tabla-preguntas td:nth-child(1)::before{
+    content: "ID";
+  }
+
+  .tabla-preguntas td:nth-child(2)::before{
+    content: "Pregunta";
+  }
+
+  .tabla-preguntas td:nth-child(3)::before{
+    content: "Orden";
+  }
+
+  .tabla-preguntas td:nth-child(4)::before{
+    content: "Estado";
+  }
+
+  .tabla-preguntas td:nth-child(5)::before{
+    content: "Acciones";
+  }
+
+  .tabla-preguntas td::before{
+    color: var(--verde-crcc);
+    font-weight: 700;
+  }
+
+  .tabla-preguntas td:last-child{
+    min-width: 0;
+    border-bottom: none;
+  }
+
+  .tabla-preguntas td:last-child .boton-tabla{
+    width: 100%;
+    margin: 3px 0;
   }
 
 }
@@ -1428,6 +1389,68 @@ textarea.input{
   }
 
   .tabla-areas-usuario .acciones-areas .boton-tabla{
+    width: 100%;
+  }
+
+  .tabla-areas-admin{
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .tabla-areas-admin thead{
+    display: none;
+  }
+
+  .tabla-areas-admin tbody{
+    display: block;
+    width: 100%;
+  }
+
+  .tabla-areas-admin tr{
+    display: block;
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+    background-color: white;
+  }
+
+  .tabla-areas-admin tr:last-child{
+    margin-bottom: 0;
+  }
+
+  .tabla-areas-admin td{
+    display: grid;
+    grid-template-columns: 145px minmax(0, 1fr);
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+    padding: 10px 0;
+    border-bottom: 1px solid #eeeeee;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .tabla-areas-admin td::before{
+    content: attr(data-label);
+    color: var(--verde-crcc);
+    font-weight: 700;
+  }
+
+  .tabla-areas-admin td:last-child{
+    min-width: 0;
+    border-bottom: none;
+  }
+
+  .tabla-areas-admin .acciones-areas{
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tabla-areas-admin .acciones-areas .boton-tabla{
     width: 100%;
   }
 
@@ -1495,9 +1518,10 @@ textarea.input{
   }
 
 }
+
 /* ajuste de ultimas alertas para celulares */
 
-@media (max-width: 600px){
+@media (max-width: 900px){
 
   .ultimas-alertas{
     padding: 20px 14px;
@@ -1695,7 +1719,7 @@ textarea.input{
 
 /* ajuste de seguimientos para celulares */
 
-@media (max-width: 600px){
+@media (max-width: 900px){
 
   .seguimientos-header{
     flex-direction: column;
@@ -2011,9 +2035,8 @@ textarea.input{
 
 @media (max-width: 600px){
 
-  .modal-overlay{
+  .modal-overlay:has(.modal-usuario){
     align-items: flex-start;
-    padding: 12px;
   }
 
   .modal-usuario{
@@ -2039,6 +2062,105 @@ textarea.input{
 
   .modal-usuario-botones .boton{
     width: 100%;
+  }
+
+}
+
+/* ajustes responsive de bitacora */
+
+.tabla-bitacora th:nth-child(5),
+.tabla-bitacora td:nth-child(5){
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* ajuste de bitacora para tablets y celulares */
+
+@media (max-width: 900px){
+
+  .tabla-bitacora{
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .tabla-bitacora thead{
+    display: none;
+  }
+
+  .tabla-bitacora tbody{
+    display: block;
+    width: 100%;
+  }
+
+  .tabla-bitacora tr{
+    display: block;
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+    background-color: white;
+  }
+
+  .tabla-bitacora tr:last-child{
+    margin-bottom: 0;
+  }
+
+  .tabla-bitacora td{
+    display: grid;
+    grid-template-columns: 125px minmax(0, 1fr);
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+    padding: 10px 0;
+    border-bottom: 1px solid #eeeeee;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .tabla-bitacora td::before{
+    content: attr(data-label);
+    color: var(--verde-crcc);
+    font-weight: 700;
+  }
+
+  .tabla-bitacora td:last-child{
+    min-width: 0;
+    border-bottom: none;
+  }
+
+}
+
+/* ajuste adicional de bitacora para celulares */
+
+@media (max-width: 600px){
+
+  .filtros-bitacora{
+    width: 100%;
+    padding: 18px;
+  }
+
+  .filtros-bitacora .input{
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .filtros-bitacora .boton{
+    width: 100%;
+  }
+
+  .tabla-bitacora{
+    min-width: 0;
+  }
+
+  .tabla-bitacora tr{
+    padding: 14px;
+  }
+
+  .tabla-bitacora td{
+    grid-template-columns: 100px minmax(0, 1fr);
   }
 
 }

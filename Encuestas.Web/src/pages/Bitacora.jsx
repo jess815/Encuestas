@@ -12,7 +12,7 @@ function Bitacora() {
 
     }, [])
 
-    // Carga los registros de bitácora
+    // carga los registros de bitacora
     const obtenerBitacora = async () => {
 
         try {
@@ -43,18 +43,20 @@ function Bitacora() {
 
     }
 
-    // Da formato a la fecha
+    // da formato a la fecha
     const formatearFecha = (fecha) => {
 
         if (fecha === null || fecha === undefined) {
+
             return 'No indicada'
+
         }
 
         return new Date(fecha).toLocaleString()
 
     }
 
-    // Limpia filtros
+    // limpia los filtros
     const limpiarFiltros = () => {
 
         setBusqueda('')
@@ -62,24 +64,45 @@ function Bitacora() {
 
     }
 
-    // Obtiene módulos únicos
-    const modulosUnicos = [...new Set(bitacora.map((registro) => registro.modulo))]
+    // obtiene los modulos disponibles
+    const modulosUnicos = [
+        ...new Set(
+            bitacora.map((registro) =>
+                registro.modulo
+            )
+        )
+    ]
 
-    // Filtra la bitácora
+    // filtra los registros de bitacora
     const bitacoraFiltrada = bitacora.filter((registro) => {
 
         const textoBusqueda = busqueda.toLowerCase()
 
         const coincideBusqueda =
-            (registro.nombreUsuario || '').toLowerCase().includes(textoBusqueda) ||
-            (registro.modulo || '').toLowerCase().includes(textoBusqueda) ||
-            (registro.accion || '').toLowerCase().includes(textoBusqueda) ||
-            (registro.detalle || '').toLowerCase().includes(textoBusqueda)
+            (registro.nombreUsuario || '')
+                .toLowerCase()
+                .includes(textoBusqueda) ||
+
+            (registro.modulo || '')
+                .toLowerCase()
+                .includes(textoBusqueda) ||
+
+            (registro.accion || '')
+                .toLowerCase()
+                .includes(textoBusqueda) ||
+
+            (registro.detalle || '')
+                .toLowerCase()
+                .includes(textoBusqueda)
 
         const coincideModulo =
-            moduloFiltro === '' || registro.modulo === moduloFiltro
+            moduloFiltro === '' ||
+            registro.modulo === moduloFiltro
 
-        return coincideBusqueda && coincideModulo
+        return (
+            coincideBusqueda &&
+            coincideModulo
+        )
 
     })
 
@@ -95,7 +118,7 @@ function Bitacora() {
 
             </div>
 
-            <div className="card-dashboard">
+            <div className="card-dashboard filtros-bitacora">
 
                 <h3>
                     Filtros
@@ -110,7 +133,9 @@ function Bitacora() {
                     placeholder="Buscar por usuario, módulo, acción o detalle"
                     className="input"
                     value={busqueda}
-                    onChange={(e) => setBusqueda(e.target.value)}
+                    onChange={(e) =>
+                        setBusqueda(e.target.value)
+                    }
                 />
 
                 <label>
@@ -120,8 +145,11 @@ function Bitacora() {
                 <select
                     className="input"
                     value={moduloFiltro}
-                    onChange={(e) => setModuloFiltro(e.target.value)}
+                    onChange={(e) =>
+                        setModuloFiltro(e.target.value)
+                    }
                 >
+
                     <option value="">
                         Todos los módulos
                     </option>
@@ -138,6 +166,7 @@ function Bitacora() {
 
                         ))
                     }
+
                 </select>
 
                 <button
@@ -153,7 +182,7 @@ function Bitacora() {
                 Total de registros: {bitacoraFiltrada.length}
             </p>
 
-            <table className="tabla">
+            <table className="tabla tabla-bitacora">
 
                 <thead>
 
@@ -175,28 +204,38 @@ function Bitacora() {
 
                             <tr key={registro.idBitacora}>
 
-                                <td>
+                                <td data-label="ID">
                                     {registro.idBitacora}
                                 </td>
 
-                                <td>
-                                    {registro.nombreUsuario || `Usuario #${registro.idUsuario}`}
+                                <td data-label="Usuario">
+                                    {
+                                        registro.nombreUsuario ||
+                                        `Usuario #${registro.idUsuario}`
+                                    }
                                 </td>
 
-                                <td>
+                                <td data-label="Módulo">
                                     {registro.modulo}
                                 </td>
 
-                                <td>
+                                <td data-label="Acción">
                                     {registro.accion}
                                 </td>
 
-                                <td>
-                                    {registro.detalle || 'Sin detalle'}
+                                <td data-label="Detalle">
+                                    {
+                                        registro.detalle ||
+                                        'Sin detalle'
+                                    }
                                 </td>
 
-                                <td>
-                                    {formatearFecha(registro.fechaAccion)}
+                                <td data-label="Fecha">
+                                    {
+                                        formatearFecha(
+                                            registro.fechaAccion
+                                        )
+                                    }
                                 </td>
 
                             </tr>

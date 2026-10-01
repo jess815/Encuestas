@@ -173,7 +173,7 @@ function ModalNuevoUsuario({ onCerrar, obtenerUsuarios, usuarioEditar }) {
 
         <div className="modal-overlay">
 
-            <div className="modal">
+            <div className="modal modal-usuario">
 
                 <h2>
                     {
@@ -196,7 +196,9 @@ function ModalNuevoUsuario({ onCerrar, obtenerUsuarios, usuarioEditar }) {
                     placeholder="Nombre completo"
                     className="input"
                     value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
+                    onChange={(e) =>
+                        setNombre(e.target.value)
+                    }
                 />
 
                 <label>
@@ -208,7 +210,9 @@ function ModalNuevoUsuario({ onCerrar, obtenerUsuarios, usuarioEditar }) {
                     placeholder="Usuario de ingreso"
                     className="input"
                     value={usuario}
-                    onChange={(e) => setUsuario(e.target.value)}
+                    onChange={(e) =>
+                        setUsuario(e.target.value)
+                    }
                 />
 
                 <label>
@@ -228,7 +232,9 @@ function ModalNuevoUsuario({ onCerrar, obtenerUsuarios, usuarioEditar }) {
                     }
                     className="input"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) =>
+                        setPassword(e.target.value)
+                    }
                 />
 
                 <h3>
@@ -241,7 +247,9 @@ function ModalNuevoUsuario({ onCerrar, obtenerUsuarios, usuarioEditar }) {
                         type="checkbox"
                         checked={administrador}
                         onChange={(e) =>
-                            cambiarAdministrador(e.target.checked)
+                            cambiarAdministrador(
+                                e.target.checked
+                            )
                         }
                     />
 
@@ -255,7 +263,9 @@ function ModalNuevoUsuario({ onCerrar, obtenerUsuarios, usuarioEditar }) {
                         type="checkbox"
                         checked={editaEncuesta}
                         onChange={(e) =>
-                            setEditaEncuesta(e.target.checked)
+                            setEditaEncuesta(
+                                e.target.checked
+                            )
                         }
                     />
 
@@ -269,7 +279,9 @@ function ModalNuevoUsuario({ onCerrar, obtenerUsuarios, usuarioEditar }) {
                         type="checkbox"
                         checked={exportaExcel}
                         onChange={(e) =>
-                            setExportaExcel(e.target.checked)
+                            setExportaExcel(
+                                e.target.checked
+                            )
                         }
                     />
 
@@ -383,7 +395,7 @@ function ModalNuevoUsuario({ onCerrar, obtenerUsuarios, usuarioEditar }) {
 
                 </label>
 
-                <div className="modal-botones">
+                <div className="modal-botones modal-usuario-botones">
 
                     <button
                         className="boton"

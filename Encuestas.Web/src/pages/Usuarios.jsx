@@ -208,7 +208,7 @@ function Usuarios() {
 
             <div className="tabla-contenedor">
 
-                <div className="tabla-header">
+                <div className="tabla-header usuarios-header">
 
                     <div>
 
@@ -253,23 +253,23 @@ function Usuarios() {
 
                                 <tr key={usuario.idUsuario}>
 
-                                    <td>
+                                    <td data-label="Nombre">
                                         {usuario.nombre}
                                     </td>
 
-                                    <td>
+                                    <td data-label="Usuario">
                                         {usuario.usuario}
                                     </td>
 
-                                    <td>
+                                    <td data-label="Permisos">
                                         {obtenerPermisos(usuario)}
                                     </td>
 
-                                    <td>
+                                    <td data-label="Áreas">
                                         {obtenerAreas(usuario)}
                                     </td>
 
-                                    <td>
+                                    <td data-label="Estado">
                                         {
                                             usuario.activo
                                                 ? 'Activo'
@@ -277,27 +277,31 @@ function Usuarios() {
                                         }
                                     </td>
 
-                                    <td>
+                                    <td data-label="Acciones">
 
-                                        <button
-                                            className="boton-tabla editar"
-                                            onClick={() =>
-                                                abrirEditar(usuario)
-                                            }
-                                        >
-                                            Editar
-                                        </button>
+                                        <div className="acciones-usuarios">
 
-                                        <button
-                                            className="boton-tabla eliminar"
-                                            onClick={() =>
-                                                eliminarUsuario(
-                                                    usuario.idUsuario
-                                                )
-                                            }
-                                        >
-                                            Eliminar
-                                        </button>
+                                            <button
+                                                className="boton-tabla editar"
+                                                onClick={() =>
+                                                    abrirEditar(usuario)
+                                                }
+                                            >
+                                                Editar
+                                            </button>
+
+                                            <button
+                                                className="boton-tabla eliminar"
+                                                onClick={() =>
+                                                    eliminarUsuario(
+                                                        usuario.idUsuario
+                                                    )
+                                                }
+                                            >
+                                                Eliminar
+                                            </button>
+
+                                        </div>
 
                                     </td>
 
