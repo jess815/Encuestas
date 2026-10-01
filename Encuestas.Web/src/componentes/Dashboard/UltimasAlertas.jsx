@@ -1,14 +1,12 @@
 function UltimasAlertas({
   dashboardDatos
 }) {
-
   // obtiene las ultimas alertas
   const alertas =
     dashboardDatos?.ultimasAlertas ?? []
 
   // convierte la fecha recibida en un formato legible
   const formatearFecha = (fecha) => {
-
     if (!fecha) {
       return 'Sin fecha'
     }
@@ -29,12 +27,10 @@ function UltimasAlertas({
         minute: '2-digit'
       }
     )
-
   }
 
   // redondea la nota para evitar decimales extensos
   const formatearNota = (nota) => {
-
     const valor = Number(nota)
 
     if (Number.isNaN(valor)) {
@@ -42,11 +38,9 @@ function UltimasAlertas({
     }
 
     return `${Math.round(valor)}%`
-
   }
 
   return (
-
     <div className="card-dashboard ultimas-alertas">
 
       <h3>
@@ -61,29 +55,17 @@ function UltimasAlertas({
             </p>
           )
           : (
-
             <div className="tabla-responsive">
 
-              <table className="tabla-dashboard tabla-alertas">
+              <table className="tabla-dashboard">
 
                 <thead>
 
                   <tr>
-                    <th className="alerta-columna-area">
-                      Área
-                    </th>
-
-                    <th className="alerta-columna-nota">
-                      Nota
-                    </th>
-
-                    <th className="alerta-columna-comentario">
-                      Comentario
-                    </th>
-
-                    <th className="alerta-columna-fecha">
-                      Fecha
-                    </th>
+                    <th>Área</th>
+                    <th>Nota</th>
+                    <th>Comentario</th>
+                    <th>Fecha</th>
                   </tr>
 
                 </thead>
@@ -99,22 +81,22 @@ function UltimasAlertas({
                         }
                       >
 
-                        <td className="alerta-columna-area">
+                        <td data-label="Área">
                           {alerta.area}
                         </td>
 
-                        <td className="alerta-columna-nota">
+                        <td data-label="Nota">
                           {formatearNota(alerta.nota)}
                         </td>
 
-                        <td className="alerta-columna-comentario">
+                        <td data-label="Comentario">
                           {
                             alerta.comentario ||
                             'Sin comentario'
                           }
                         </td>
 
-                        <td className="alerta-columna-fecha">
+                        <td data-label="Fecha">
                           {formatearFecha(alerta.fecha)}
                         </td>
 
@@ -132,9 +114,7 @@ function UltimasAlertas({
       }
 
     </div>
-
   )
-
 }
 
 export default UltimasAlertas

@@ -364,7 +364,7 @@ function Reportes({
 
             <div className="tabla-contenedor">
 
-                <div className="tabla-header">
+                <div className="tabla-header reportes-header">
 
                     <div>
 
@@ -391,7 +391,7 @@ function Reportes({
 
                 </div>
 
-                <div className="card-dashboard">
+                <div className="card-dashboard filtros-reportes">
 
                     <h3>
                         Filtros
@@ -498,7 +498,7 @@ function Reportes({
 
                         :
 
-                        <table className="tabla">
+                        <table className="tabla tabla-reportes">
 
                             <thead>
 
@@ -522,15 +522,15 @@ function Reportes({
 
                                         <tr key={respuesta.idRespuesta}>
 
-                                            <td>
+                                            <td data-label="ID">
                                                 {respuesta.idRespuesta}
                                             </td>
 
-                                            <td>
+                                            <td data-label="Área">
                                                 {respuesta.nombreArea}
                                             </td>
 
-                                            <td>
+                                            <td data-label="Socio / Evento">
                                                 {
                                                     respuesta.nombreSocio ||
                                                     respuesta.evento ||
@@ -538,14 +538,14 @@ function Reportes({
                                                 }
                                             </td>
 
-                                            <td>
+                                            <td data-label="Comentario">
                                                 {
                                                     respuesta.comentario ||
                                                     'Sin comentario'
                                                 }
                                             </td>
 
-                                            <td>
+                                            <td data-label="Nota general">
                                                 {
                                                     respuesta.notaGeneral !== null
                                                         ? respuesta.notaGeneral
@@ -553,7 +553,7 @@ function Reportes({
                                                 }
                                             </td>
 
-                                            <td>
+                                            <td data-label="Alerta">
                                                 {
                                                     respuesta.alerta
                                                         ? 'Sí'
@@ -561,7 +561,7 @@ function Reportes({
                                                 }
                                             </td>
 
-                                            <td>
+                                            <td data-label="Fecha">
                                                 {
                                                     formatearFecha(
                                                         respuesta.fechaRespuesta
@@ -569,16 +569,20 @@ function Reportes({
                                                 }
                                             </td>
 
-                                            <td>
+                                            <td data-label="Acciones">
 
-                                                <button
-                                                    className="boton-tabla editar"
-                                                    onClick={() =>
-                                                        abrirDetalle(respuesta)
-                                                    }
-                                                >
-                                                    Ver detalle
-                                                </button>
+                                                <div className="acciones-reportes">
+
+                                                    <button
+                                                        className="boton-tabla editar"
+                                                        onClick={() =>
+                                                            abrirDetalle(respuesta)
+                                                        }
+                                                    >
+                                                        Ver detalle
+                                                    </button>
+
+                                                </div>
 
                                             </td>
 

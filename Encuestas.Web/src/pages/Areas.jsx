@@ -269,7 +269,13 @@ function Areas({
 
                         :
 
-                        <table className="tabla">
+                        <table
+                            className={
+                                esAdministrador
+                                    ? 'tabla tabla-areas tabla-areas-admin'
+                                    : 'tabla tabla-areas tabla-areas-usuario'
+                            }
+                        >
 
                             <thead>
 
@@ -301,11 +307,11 @@ function Areas({
 
                                         <tr key={area.idArea}>
 
-                                            <td>
+                                            <td data-label="Área">
                                                 {area.nombre}
                                             </td>
 
-                                            <td>
+                                            <td data-label="Tipo">
                                                 {area.tipo}
                                             </td>
 
@@ -314,14 +320,14 @@ function Areas({
 
                                                 <>
 
-                                                    <td>
+                                                    <td data-label="Correo general">
                                                         {
                                                             area.correoGeneral ||
                                                             'Sin configurar'
                                                         }
                                                     </td>
 
-                                                    <td>
+                                                    <td data-label="Correo del área">
                                                         {
                                                             area.correoArea ||
                                                             'Sin configurar'
@@ -332,7 +338,7 @@ function Areas({
 
                                             }
 
-                                            <td>
+                                            <td data-label="Estado">
                                                 {
                                                     area.activo
                                                         ? 'Activo'
@@ -340,63 +346,67 @@ function Areas({
                                                 }
                                             </td>
 
-                                            <td>
+                                            <td data-label="Acciones">
 
-                                                <button
-                                                    className="boton-tabla editar"
-                                                    onClick={() =>
-                                                        abrirEncuesta(area)
+                                                <div className="acciones-areas">
+
+                                                    <button
+                                                        className="boton-tabla editar"
+                                                        onClick={() =>
+                                                            abrirEncuesta(area)
+                                                        }
+                                                    >
+                                                        Abrir encuesta
+                                                    </button>
+
+                                                    <button
+                                                        className="boton-tabla editar"
+                                                        onClick={() =>
+                                                            copiarEnlace(area)
+                                                        }
+                                                    >
+                                                        Copiar enlace
+                                                    </button>
+
+                                                    {
+                                                        esAdministrador &&
+
+                                                        <>
+
+                                                            <button
+                                                                className="boton-tabla editar"
+                                                                onClick={() =>
+                                                                    setAreaSeleccionada(area)
+                                                                }
+                                                            >
+                                                                Ver preguntas
+                                                            </button>
+
+                                                            <button
+                                                                className="boton-tabla editar"
+                                                                onClick={() =>
+                                                                    abrirEditar(area)
+                                                                }
+                                                            >
+                                                                Editar
+                                                            </button>
+
+                                                            <button
+                                                                className="boton-tabla eliminar"
+                                                                onClick={() =>
+                                                                    eliminarArea(
+                                                                        area.idArea
+                                                                    )
+                                                                }
+                                                            >
+                                                                Eliminar
+                                                            </button>
+
+                                                        </>
+
                                                     }
-                                                >
-                                                    Abrir encuesta
-                                                </button>
 
-                                                <button
-                                                    className="boton-tabla editar"
-                                                    onClick={() =>
-                                                        copiarEnlace(area)
-                                                    }
-                                                >
-                                                    Copiar enlace
-                                                </button>
-
-                                                {
-                                                    esAdministrador &&
-
-                                                    <>
-
-                                                        <button
-                                                            className="boton-tabla editar"
-                                                            onClick={() =>
-                                                                setAreaSeleccionada(area)
-                                                            }
-                                                        >
-                                                            Ver preguntas
-                                                        </button>
-
-                                                        <button
-                                                            className="boton-tabla editar"
-                                                            onClick={() =>
-                                                                abrirEditar(area)
-                                                            }
-                                                        >
-                                                            Editar
-                                                        </button>
-
-                                                        <button
-                                                            className="boton-tabla eliminar"
-                                                            onClick={() =>
-                                                                eliminarArea(
-                                                                    area.idArea
-                                                                )
-                                                            }
-                                                        >
-                                                            Eliminar
-                                                        </button>
-
-                                                    </>
-
-                                                }
+                                                </div>
 
                                             </td>
 

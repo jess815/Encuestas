@@ -13,6 +13,7 @@ function Opciones() {
 
     }, [])
 
+    // obtiene las opciones registradas
     const obtenerOpciones = async () => {
 
         try {
@@ -43,6 +44,7 @@ function Opciones() {
 
     }
 
+    // abre el modal para crear una opcion
     const abrirNuevo = () => {
 
         setOpcionEditar(null)
@@ -50,6 +52,7 @@ function Opciones() {
 
     }
 
+    // abre el modal para editar una opcion
     const abrirEditar = (opcion) => {
 
         setOpcionEditar(opcion)
@@ -57,6 +60,7 @@ function Opciones() {
 
     }
 
+    // cierra el modal de opciones
     const cerrarModal = () => {
 
         setOpcionEditar(null)
@@ -64,19 +68,27 @@ function Opciones() {
 
     }
 
+    // elimina una opcion registrada
     const eliminarOpcion = async (idOpcion) => {
 
-        const confirmar = window.confirm('¿Está segura de eliminar esta opción?')
+        const confirmar = window.confirm(
+            '¿Está segura de eliminar esta opción?'
+        )
 
         if (!confirmar) {
+
             return
+
         }
 
         try {
 
-            const response = await fetch(`/api/Opcion/${idOpcion}`, {
-                method: 'DELETE'
-            })
+            const response = await fetch(
+                `/api/Opcion/${idOpcion}`,
+                {
+                    method: 'DELETE'
+                }
+            )
 
             if (response.ok) {
 
@@ -106,7 +118,7 @@ function Opciones() {
 
             <div className="tabla-contenedor">
 
-                <div className="tabla-header">
+                <div className="tabla-header opciones-header">
 
                     <h2>
                         Administración de Opciones
@@ -121,7 +133,7 @@ function Opciones() {
 
                 </div>
 
-                <table className="tabla">
+                <table className="tabla tabla-opciones">
 
                     <thead>
 
@@ -143,23 +155,23 @@ function Opciones() {
 
                                 <tr key={opcion.idOpcion}>
 
-                                    <td>
+                                    <td data-label="ID">
                                         {opcion.idOpcion}
                                     </td>
 
-                                    <td>
+                                    <td data-label="Texto">
                                         {opcion.texto}
                                     </td>
 
-                                    <td>
+                                    <td data-label="Valor">
                                         {opcion.valor}
                                     </td>
 
-                                    <td>
+                                    <td data-label="Orden visual">
                                         {opcion.ordenVisual}
                                     </td>
 
-                                    <td>
+                                    <td data-label="Estado">
                                         {
                                             opcion.activo
                                                 ? 'Activo'
@@ -167,21 +179,31 @@ function Opciones() {
                                         }
                                     </td>
 
-                                    <td>
+                                    <td data-label="Acciones">
 
-                                        <button
-                                            className="boton-tabla editar"
-                                            onClick={() => abrirEditar(opcion)}
-                                        >
-                                            Editar
-                                        </button>
+                                        <div className="acciones-opciones">
 
-                                        <button
-                                            className="boton-tabla eliminar"
-                                            onClick={() => eliminarOpcion(opcion.idOpcion)}
-                                        >
-                                            Eliminar
-                                        </button>
+                                            <button
+                                                className="boton-tabla editar"
+                                                onClick={() =>
+                                                    abrirEditar(opcion)
+                                                }
+                                            >
+                                                Editar
+                                            </button>
+
+                                            <button
+                                                className="boton-tabla eliminar"
+                                                onClick={() =>
+                                                    eliminarOpcion(
+                                                        opcion.idOpcion
+                                                    )
+                                                }
+                                            >
+                                                Eliminar
+                                            </button>
+
+                                        </div>
 
                                     </td>
 

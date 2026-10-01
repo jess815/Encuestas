@@ -292,7 +292,7 @@ function Seguimientos({
 
             <div className="tabla-contenedor">
 
-                <div className="tabla-header">
+                <div className="tabla-header seguimientos-header">
 
                     <div>
 
@@ -336,7 +336,7 @@ function Seguimientos({
 
                         :
 
-                        <table className="tabla">
+                        <table className="tabla tabla-seguimientos">
 
                             <thead>
 
@@ -367,11 +367,11 @@ function Seguimientos({
 
                                             <tr key={seguimiento.idSeguimiento}>
 
-                                                <td>
+                                                <td data-label="Encuesta">
                                                     Encuesta #{seguimiento.idRespuesta}
                                                 </td>
 
-                                                <td>
+                                                <td data-label="Área">
                                                     {
                                                         respuesta
                                                             ? respuesta.nombreArea
@@ -379,7 +379,7 @@ function Seguimientos({
                                                     }
                                                 </td>
 
-                                                <td>
+                                                <td data-label="Socio / Evento">
                                                     {
                                                         respuesta
                                                             ? (
@@ -391,7 +391,7 @@ function Seguimientos({
                                                     }
                                                 </td>
 
-                                                <td>
+                                                <td data-label="Comentario">
                                                     {
                                                         respuesta
                                                             ? (
@@ -402,7 +402,7 @@ function Seguimientos({
                                                     }
                                                 </td>
 
-                                                <td>
+                                                <td data-label="Nota">
                                                     {
                                                         respuesta &&
                                                             respuesta.notaGeneral !== null
@@ -411,11 +411,11 @@ function Seguimientos({
                                                     }
                                                 </td>
 
-                                                <td>
+                                                <td data-label="Estado">
                                                     {seguimiento.estado}
                                                 </td>
 
-                                                <td>
+                                                <td data-label="Fecha">
                                                     {
                                                         formatearFecha(
                                                             seguimiento.fechaCreacion
@@ -423,40 +423,44 @@ function Seguimientos({
                                                     }
                                                 </td>
 
-                                                <td>
+                                                <td data-label="Acciones">
 
-                                                    <button
-                                                        className="boton-tabla editar"
-                                                        onClick={() =>
-                                                            abrirComentarios(seguimiento)
-                                                        }
-                                                    >
-                                                        Ver seguimiento
-                                                    </button>
-
-                                                    <button
-                                                        className="boton-tabla editar"
-                                                        onClick={() =>
-                                                            abrirEditar(seguimiento)
-                                                        }
-                                                    >
-                                                        Editar
-                                                    </button>
-
-                                                    {
-                                                        esAdministrador &&
+                                                    <div className="acciones-seguimientos">
 
                                                         <button
-                                                            className="boton-tabla eliminar"
+                                                            className="boton-tabla editar"
                                                             onClick={() =>
-                                                                eliminarSeguimiento(
-                                                                    seguimiento.idSeguimiento
-                                                                )
+                                                                abrirComentarios(seguimiento)
                                                             }
                                                         >
-                                                            Eliminar
+                                                            Ver seguimiento
                                                         </button>
-                                                    }
+
+                                                        <button
+                                                            className="boton-tabla editar"
+                                                            onClick={() =>
+                                                                abrirEditar(seguimiento)
+                                                            }
+                                                        >
+                                                            Editar
+                                                        </button>
+
+                                                        {
+                                                            esAdministrador &&
+
+                                                            <button
+                                                                className="boton-tabla eliminar"
+                                                                onClick={() =>
+                                                                    eliminarSeguimiento(
+                                                                        seguimiento.idSeguimiento
+                                                                    )
+                                                                }
+                                                            >
+                                                                Eliminar
+                                                            </button>
+                                                        }
+
+                                                    </div>
 
                                                 </td>
 
