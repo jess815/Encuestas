@@ -16,7 +16,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 // inyecciones de dependencias
 
 // areas y encuestas
@@ -58,7 +57,6 @@ builder.Services.AddScoped<IBitacoraDA, BitacoraDA>();
 // conexion con sql server usando dapper
 builder.Services.AddScoped<IEncuestaDapper, RepositorioDapper>();
 
-
 var app = builder.Build();
 
 // habilita swagger solo en desarrollo
@@ -70,8 +68,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// permite servir los archivos compilados de react
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseAuthorization();
 
+// mantiene las rutas del api
 app.MapControllers();
+
+// permite que las rutas del frontend regresen al index de react
+app.MapFallbackToFile("index.html");
 
 app.Run();
